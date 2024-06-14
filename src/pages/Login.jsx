@@ -4,7 +4,7 @@ import { post } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetUser } from '../redux/AuthSlice';
-import logologin from '../assets/logologin.svg';
+import logologin from '../assets/Logo-pulang-hitam 1.svg';
 
 export default function Login() {
   const user = useSelector((state) => state.Auth);

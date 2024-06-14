@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logologin from '../assets/logologin.svg';
+import logologin from '../assets/Logo-pulang-hitam 1.svg';
 
 export default function Sidebar() {
   const user = useSelector((state) => state.Auth.user);

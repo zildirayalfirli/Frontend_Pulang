@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { post } from '../services/ApiEndpoint'
 import { Logout } from '../redux/AuthSlice'
-import logologin from '../assets/logologin.svg';
+import logologin from '../assets/Logo-pulang-hitam 1.svg';
 
 export default function LogOut() {
   const user=useSelector((state)=>state.Auth.user)
