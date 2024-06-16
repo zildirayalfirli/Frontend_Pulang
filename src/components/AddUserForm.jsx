@@ -32,57 +32,66 @@ export default function AddUserForm({ onClose, onSuccess }) {
   };
 
   return (
+    <div className='flex flex-col gap-y-2 mb-4'>
+      <div className='text-black text-center text-heading-5'>
+        <h2>Add New User or Admin</h2>
+      </div>
+
     <form onSubmit={handleAddUserSubmit}>
-      <div className='input-group'>
-        <label htmlFor='username' className='block text-sm font-medium text-gray-700'>Username</label>
+      <div className='mt-4'>
+        <label htmlFor='username' className='mb-2 block text-body-xl text-gray-700'>Username</label>
         <input
           type='text'
           id='username'
+          placeholder="Enter Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className='mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+           className='text-body-l border-2 border-[#EE7F2B] rounded-lg h-12 w-72 placeholder:text-slate-400 px-4'
         />
       </div>
-      <div className='input-group'>
-        <label htmlFor='password' className='block text-sm font-medium text-gray-700'>Password</label>
+      <div className='mt-4'>
+        <label htmlFor='password' className='mb-2 block text-body-xl text-gray-700'>Password</label>
         <input
           type='password'
           id='password'
+          placeholder="Enter Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className='mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+           className='text-body-l border-2 border-[#EE7F2B] rounded-lg h-12 w-72 placeholder:text-slate-400 px-4'
         />
       </div>
-      <div className='input-group'>
-        <label htmlFor='passwordAgain' className='block text-sm font-medium text-gray-700'>Confirm Password</label>
+      <div className='mt-4'>
+        <label htmlFor='passwordAgain' className='mb-2 block text-body-xl text-gray-700'>Confirm Password</label>
         <input
           type='password'
           id='passwordAgain'
+          placeholder="Enter Password Again"
           value={passwordAgain}
           onChange={(e) => setPasswordAgain(e.target.value)}
-          className='mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+           className='text-body-l border-2 border-[#EE7F2B] rounded-lg h-12 w-72 placeholder:text-slate-400 px-4'
         />
       </div>
-      <div className='input-group'>
-        <label htmlFor='role' className='block text-sm font-medium text-gray-700'>Role</label>
+      <div className='mt-4'>
+        <label htmlFor='role' className='mb-2 block text-body-xl text-gray-700'>Role</label>
         <select
           id='role'
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className='mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+           className='text-body-l border-2 border-[#EE7F2B] rounded-lg h-12 w-36 placeholder:text-slate-400 px-4'
         >
           <option value='user'>User</option>
           <option value='admin'>Admin</option>
         </select>
       </div>
-      <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-        <button type='submit' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm'>
+      <div className='mt-8 flex justify-start gap-4'>
+        <button type='submit' className='inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-body-l text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-auto'>
           Add User
         </button>
-        <button type='button' onClick={onClose} className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm'>
+        <button type='button' onClick={onClose} className='inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-500 text-body-l text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-auto'>
           Cancel
         </button>
       </div>
     </form>
+    </div>
   );
 }

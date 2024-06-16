@@ -64,10 +64,10 @@ function FileUpload() {
 
   return (
     <div className="h-fit w-full">
-    <div className="py-8 flex flex-col items-center justify-center bg-primary-100 rounded-lg border-2 border-[#EE7F2B]">
-      <div className="bg-white p-8 w-1/2 rounded-lg shadow-lg border-2 border-black">
+    <div className="py-8 px-4 w-full flex flex-col items-center justify-center bg-primary-100 rounded-lg border-2 border-[#EE7F2B]">
+      <div className="bg-primary-300 p-8 w-1/2 rounded-lg shadow-lg border-2 border-black">
         <form className="flex flex-col items-center" onSubmit={submitFile}>
-          <label className="w-64 flex flex-col border-dashed border-2 border-[#EE7F2B] items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-secondary-300 hover:text-white">
+          <label className="w-full flex flex-col border-dashed border-2 border-[#EE7F2B] items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-secondary-300 hover:text-white">
           <FaArrowUp className="h-8 w-8"/>
             <span className="mt-2 text-base leading-normal">Upload File</span>
             <input 
@@ -93,17 +93,15 @@ function FileUpload() {
         </form>
       </div>
       
-      <div className="w-1/2 border-2 border-black max-w-4xl mt-8 p-4 bg-white rounded-lg shadow-lg">
-        <h4 className="text-xl font-bold mb-4">Uploaded CSV Files:</h4>
-        <div className="border-t border-gray-200">
-          <div className="grid grid-cols-2 gap-4 py-2">
-            <div className="font-semibold">Title</div>
-          </div>
+      <div className="w-full border-2 border-black max-w-4xl mt-10 py-4 px-8 bg-primary-300 rounded-lg shadow-lg">
+        <h4 className="text-xl font-bold mt-2 mb-6">Uploaded CSV Files:</h4>
+        <div className="border-t border-black">
+          <div className="grid grid-cols-2 gap-4 py-2" />
           {allFiles.length === 0 ? (
             <p className="py-2">No files uploaded yet.</p>
           ) : (
             allFiles.map((data, index) => (
-              <div className="grid grid-cols-2 gap-4 py-2 mr-20" key={index}>
+              <div className="grid grid-cols-2 gap-4 py-2 mr-20 text-body-l" key={index}>
                 <div className="flex items-center">{data.file.fileName}</div>
                 <div className="bg-red-500 hover:bg-red-600 w-20 ml-auto h-10 flex items-center justify-center rounded-lg">
                 <button 
