@@ -20,61 +20,53 @@ export default function Sidebar() {
       </div>
       <div className="sidebar-content py-4">
         <ul>
-          <li className="mb-2 px-4 flex hover:bg-secondary-500">
+          <Link to="/" className="mb-2 px-4 flex hover:bg-secondary-500">
             <img src={logoUpload} alt="upload" className="scale-150" />
-            <Link to="/" className=" p-4 block">
+            <div className="p-4 block">
               Upload Data
-            </Link>
-          </li>
+            </div>
+          </Link>
           {user?.role === "admin" ? (
             <>
-              <li className="mb-2 px-4 flex hover:bg-secondary-500">
-                <img
-                  src={logoDashboard}
-                  alt="dashboard"
-                  className="scale-150"
-                />
-                <Link to="/dashboard" className=" p-4 block">
+              <Link to="/dashboard" className="mb-2 px-4 flex hover:bg-secondary-500">
+                <img src={logoDashboard} alt="dashboard" className="scale-150" />
+                <div className="p-4 block">
                   Dashboard
-                </Link>
-              </li>
-              <li className="mb-2 px-4 flex hover:bg-secondary-500">
+                </div>
+              </Link>
+              <Link to="/input" className="mb-2 px-4 flex hover:bg-secondary-500">
                 <img src={logoInput} alt="input" className="scale-150" />
-                <Link to="/input" className=" p-4 block">
+                <div className="p-4 block">
                   Input
-                </Link>
-              </li>
-              <li className="mb-2 px-4 flex hover:bg-secondary-500">
-                <img
-                  src={logoManageUser}
-                  alt="manage user"
-                  className="scale-150"
-                />
-                <Link to="/admin" className=" p-4 block">
+                </div>
+              </Link>
+              <Link to="/admin" className="mb-2 px-4 flex hover:bg-secondary-500">
+                <img src={logoManageUser} alt="manage user" className="scale-150" />
+                <div className="p-4 block">
                   Manage Users
-                </Link>
-              </li>
-              <li className="mb-2 px-4 flex hover:bg-secondary-500">
+                </div>
+              </Link>
+              <Link to="/logout" className="mb-2 w-full px-4 flex hover:bg-secondary-500">
                 <img src={logoLogout} alt="logout" className="scale-150" />
-                <Link to="/logout" className=" p-4 block">
+                <div className="p-4 block">
                   Log Out
-                </Link>
-              </li>
+                </div>
+              </Link>
             </>
           ) : (
             <>
-              <li className="mb-2 px-4 flex hover:bg-secondary-500">
+              <Link to="/input" className="mb-2 px-4 flex hover:bg-secondary-500">
                 <img src={logoInput} alt="input" className="scale-150" />
-                <Link to="/input" className=" p-4 block">
+                <div className="p-4 block">
                   Input
-                </Link>
-              </li>
-              <li className="mb-2 px-4 flex hover:bg-secondary-500">
+                </div>
+              </Link>
+              <Link to="/logout" className="mb-2 w-full px-4 flex hover:bg-secondary-500">
                 <img src={logoLogout} alt="logout" className="scale-150" />
-                <Link to="/logout" className=" p-4 block">
+                <div className="p-4 block">
                   Log Out
-                </Link>
-              </li>
+                </div>
+              </Link>
             </>
           )}
         </ul>

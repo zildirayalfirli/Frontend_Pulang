@@ -65,22 +65,22 @@ export default function Admin() {
   };
 
   return (
-    <div className='container mx-auto p-4 bg-primary-300'>
+    <div className='container mx-auto p-4 bg-primary-100 border-2 border-secondary-300 rounded-lg'>
       <h2 className='text-heading-2 font-bold mb-4 flex justify-center'>Manage Users</h2>
       <div className='flex mt-8 justify-end'>
         <button className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg' onClick={handleAddUser}>Add User</button>
       </div>
-      <div className='bg-white mt-4 w-full'>
-        <div className='w-full flex justify-between text-heading-5'>
-            <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b'>Username</div>
-            <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b'>Role</div>
-            <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b'>Actions</div>
+      <div className='bg-primary-300 mt-4 w-full border-t-2 border-x-2 border-black rounded-lg'>
+        <div className='w-full flex justify-between text-heading-6 divide-x-2'>
+            <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>Username</div>
+            <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>Role</div>
+            <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>Actions</div>
         </div>
           {users && users.map((elem, index) => (
-            <div className='w-full h-20 flex justify-between text-body-xl' key={index}>
-              <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b'>{elem.username}</div>
-              <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b'>{elem.role}</div>
-              <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b'>
+            <div className='w-full h-20 flex justify-between text-body-xl divide-x-2' key={index}>
+              <div className='w-1/3 flex justify-center items-center py-2 px-4  border-b-2 border-black'>{elem.username}</div>
+              <div className='w-1/3 flex justify-center items-center py-2 px-4  border-b-2 border-black'>{elem.role}</div>
+              <div className='w-1/3 flex justify-center items-center py-2 px-4  border-b-2 border-black'>
                 <button className='bg-secondary-300 hover:bg-secondary-500 h-10 w-20 text-white px-2 py-1 rounded-lg mr-2' onClick={() => handleUpdateUser(elem)}>Update</button>
                 <button className='bg-red-500 hover:bg-red-600 h-10 w-20 text-white px-2 py-1 rounded-lg' onClick={() => handleDelete(elem._id)}>Delete</button>
               </div>
@@ -88,12 +88,12 @@ export default function Admin() {
           ))}
       </div>
       {showAddUserForm && (
-        <Modal title='Add New User' onClose={handleCloseAddUserForm}>
+        <Modal onClose={handleCloseAddUserForm}>
           <AddUserForm onClose={handleCloseAddUserForm} onSuccess={handleAddUserSuccess} />
         </Modal>
       )}
       {showUpdateUserForm && selectedUser && (
-        <Modal title='Update User' onClose={handleCloseUpdateUserForm}>
+        <Modal onClose={handleCloseUpdateUserForm}>
           <UpdateUserForm user={selectedUser} onClose={handleCloseUpdateUserForm} onSuccess={handleUpdateUserSuccess} />
         </Modal>
       )}
