@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import AgeCountsChart from '../components/AgeCountsChart';
 import SexCountsChart from '../components/SexCountsChart';
-import OccupationCountsChart from '../components/OccupationCountsChart';
+// import OccupationCountsChart from '../components/OccupationCountsChart';
 import SegmentCountsChart from '../components/SegmentCountsChart';
 import CountryCount from '../components/country/CountryCount';
 import CityCount from '../components/city/CityCount';
@@ -61,7 +61,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className='flex justify-center gap-8 flex-wrap w-full h-fit'>
-          <OccupationCountsChart startDate={startDate} endDate={endDate} />
+          {/* <OccupationCountsChart startDate={startDate} endDate={endDate} /> */}
         </div>
         <div className='flex justify-center gap-8 flex-wrap w-full h-fit'>
           <CityCount startDate={startDate} endDate={endDate} />
