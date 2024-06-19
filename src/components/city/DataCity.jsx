@@ -1,0 +1,113 @@
+export const cityCoordinates = {
+    "BDG": [-6.9500, 107.5667], // Bandung
+    "BLS": [-7.445947, 109.220726], // Banjarnegara
+    "TNG": [-6.202393, 106.65271], // Tangerang
+    "SMG": [-6.966667, 110.416664], // Semarang
+    "JMR": [-6.594924, 110.670027], // Jepara
+    "JKT": [-6.2146, 106.8451], // Jakarta
+    "TMG": [-7.3305, 110.5084], // Temanggung
+    "YYK": [-7.7829, 110.3608], // Yogyakarta
+    "WSB": [-6.9191, 107.6047], // Sukabumi
+    "PBR": [0.533333, 101.450000], // Pekanbaru
+    "SDA": [-7.2648, 112.7451], // Sidoarjo
+    "BKS": [-6.2333, 107.0000], // Bekasi
+    "SBY": [-7.2458, 112.7378], // Surabaya
+    "SLT": [-6.9216, 107.6236], // Salatiga
+    "SKT": [-6.778, 110.8406], // Sukoharjo
+    "CMH": [-6.8848, 107.5411], // Cimahi
+    "DPK": [-6.422, 106.823], // Depok
+    "KRG": [-7.0311, 107.6104], // Karawang
+    "MDN": [3.597031, 98.678513], // Medan
+    "SMP": [-8.583333, 116.116667], // Sampit
+    "KDR": [-7.8481, 112.0176], // Kediri
+    "MLG": [-7.983908, 112.621391], // Malang
+    "BJN": [-3.3226, 114.5926], // Banjarmasin
+    "KDS": [-8.425, 114.0423], // Kediri
+    "BPP": [-1.2656, 116.8317], // Balikpapan
+    "KLK": [-1.9847, 122.5365], // Kolaka
+    "MKS": [-5.147665, 119.432732], // Makassar
+    "SMN": [-0.9577, 100.3592], // Sumatra
+    "PAD": [-0.9492, 100.3543], // Padang
+    "MGG": [-6.6667, 111.3333], // Magelang
+    "GTO": [0.546063, 123.058578], // Gorontalo
+    "JAP": [1.4409, 124.8232], // Jayapura
+    "TSM": [-7.3667, 108.2000], // Tasikmalaya
+    "SKH": [-6.9446, 107.5776], // Sukoharjo
+    "PLK": [-2.207383, 113.917457], // Palangkaraya
+    "TGL": [-7.0833, 111.6167], // Tegal
+    "SRG": [-7.0051, 110.4381], // Serang
+    "SNG": [-8.1187, 113.2267], // Situbondo
+    "BJB": [-7.1715, 110.1806], // Banjarbaru
+    "CLP": [-6.8958, 109.0250], // Cilacap
+    "KWG": [-6.9382, 106.3728], // Kuningan
+    "CBN": [-6.7607, 108.482], // Cirebon
+    "BJR": [-7.4333, 109.2173], // Banjarnegara
+    "KTP": [-3.6456, 128.1854], // Kotamobagu
+    "SIT": [-7.7063, 110.5947], // Situbondo
+    "AGM": [-7.6000, 110.8167], // Agam
+    "TLG": [-6.9811, 110.4357], // Tegal
+    "PTK": [-0.037000, 109.342423], // Pontianak
+    "MJK": [3.5503, 97.1700], // Meulaboh
+    "BLT": [-7.7819, 110.3578], // Blitar
+    "PSR": [-7.0593, 107.6662], // Pasuruan
+    "BYL": [-8.4406, 115.2742], // Banyuwangi
+    "NJK": [-3.3318, 119.7734], // Nunukan
+    "IDM": [3.5279, 125.5514], // Tidore Kepulauan
+    "CLG": [-6.8779, 109.6618], // Cilacap
+    "KLN": [-1.5445, 113.6066], // Kualakapuas
+    "PWR": [-7.7686, 110.3633], // Purwokerto
+    "PWD": [-7.5795, 110.8097], // Purwodadi
+    "BTL": [-7.5366, 110.8306], // Batulicin
+    "LMG": [-3.7840, 119.8226], // Lamongan
+    "TBN": [-8.1565, 113.7222], // Tuban
+    "SGN": [-6.2229, 106.8479], // Singaraja
+    "KDL": [-8.2585, 113.5779], // Kendal
+    "NGW": [-7.3689, 110.3959], // Ngawi
+    "PTI": [-7.6474, 110.1413], // Pati
+    "LBS": [-7.5434, 109.2326], // Labuan Bajo
+    "BYW": [-8.2090, 114.3712], // Banyuwangi
+    "GSK": [-6.3628, 106.8325], // Garut
+    "RBG": [-8.5493, 115.4512], // Rembang
+    "PBL": [-8.0943, 112.1527], // Probolinggo
+    "MAD": [-6.7506, 108.5608], // Madiun
+    "BGL": [-6.5813, 107.7541], // Bogor
+    "WNG": [-8.6766, 121.0541], // Waingapu
+    "MND": [3.5833, 98.6700], // Mandailing
+    "JBG": [-6.9942, 110.4218], // Jepara
+    "BJM": [-3.2167, 114.5833], // Banjarmasin
+    "PBG": [3.5566, 125.5064], // Palangkaraya
+    "SBM": [1.0126, 120.2162], // Sambas
+    "PCT": [0.6363, 116.2962], // Paser
+    "LWK": [3.5633, 98.6780], // Langkat
+    "TGR": [-6.202393, 106.65271], // Tangerang
+    "DPR": [-0.5322, 116.8532], // Tanjung Redeb
+    "KBM": [-8.4056, 112.6838], // Kediri
+    "BDL": [-5.4281, 105.2580], // Bandar Lampung
+    "BBS": [-8.6333, 115.2167], // Baubau
+    "MGT": [2.9587, 99.0683], // Magetan
+    "FFK": [-6.5203, 110.7273], // Demak
+    "BNR": [-7.6246, 110.1416], // Banjarsari
+    "TAR": [-7.6181, 110.2030], // Tawangmangu
+    "KLT": [-8.2912, 115.1670], // Klaten
+    "TGT": [1.1327, 124.3923], // Tomohon
+    "PML": [3.3501, 98.5311], // Pematang Siantar
+    "PWK": [-6.2495, 106.9396], // Purwakarta
+    "CBI": [-6.5607, 106.7286], // Cibinong
+    "MPW": [-0.0830, 113.9167], // Muara Enim
+    "PAL": [-3.0024, 119.8216], // Palopo
+    "BUL": [2.7911, 120.1867], // Bulukumba
+    "JNP": [3.9681, 108.3611], // Jeneponto
+    "MRK": [-6.9504, 108.5105], // Majalengka
+    "PYH": [-0.9083, 100.3667], // Pariaman
+    "KNG": [-3.6444, 133.6958], // Kaimana
+    "BLA": [-7.9680, 111.4147], // Blitar
+    "PKL": [-7.6374, 109.6576], // Pangkalan Bun
+    "GRT": [-6.2795, 106.8333], // Garut
+    "BON": [-8.4610, 116.1128], // Bondowoso
+    "TTE": [-8.3432, 116.1268], // Tete Batu
+    "CMS": [-7.0108, 112.8473], // Gresik
+    "CJR": [-6.7607, 108.482], // Cirebon
+    "MSJ": [-3.6585, 120.2007], // Masamba
+    "": [0, 0] // Undefined
+  };
+  

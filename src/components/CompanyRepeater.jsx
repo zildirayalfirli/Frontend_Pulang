@@ -1,0 +1,113 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Treemap, Tooltip, ResponsiveContainer } from 'recharts';
+
+const CustomTreemapContent = ({ root, depth, x, y, width, height, index, payload, colors, rank, name }) => {
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        style={{
+          fill: colors[index % colors.length],
+          stroke: '#fff',
+          strokeWidth: 2 / (depth + 1e-10),
+          strokeOpacity: 1 / (depth + 1e-10),
+        }}
+      />
+      {width > 20 && height > 20 ? (
+        <text
+          x={x + width / 2}
+          y={y + height / 2}
+          textAnchor="middle"
+          fill="#fff"
+          style={{
+            fontSize: Math.min(width, height) / 30,
+            fontWeight: 'bold',
+          }}
+        >
+          {name}
+        </text>
+      ) : null}
+    </g>
+  );
+};
+
+const CompanyRecord = ({ startDate, endDate }) => {
+  const [data, setData] = useState([]);
+  const [totalRepeater, setTotalRepeater] = useState(0);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      const params = {};
+      if (startDate && endDate) {
+        const adjustedEndDate = new Date(endDate);
+        adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
+        params.startdate = startDate.toISOString().split('T')[0];
+        params.enddate = adjustedEndDate.toISOString().split('T')[0];
+      }
+
+      const response = await axios.get('http://localhost:3000/vhp/getSortedCompanyByRepeater', { params });
+      if (response.data.success) {
+        setData(response.data.data || []);
+        setTotalRepeater(response.data.totalRepeater);
+      } else {
+        setError('Failed to fetch data');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('Error fetching data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [startDate, endDate]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
+  if (!data.length) {
+    return <div>No data available for the selected date range.</div>;
+  }
+
+  const transformedData = data.map(record => ({
+    name: record.Company_TA,
+    size: record.totalRepeater ?? 0,
+  }));
+
+  return (
+    <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
+      <div className="text-heading-6 mb-4">Total Record: {totalRepeater}</div>
+      <div className='flex justify-center items-center mb-8 text-heading-3'>
+        Top Company Repeater
+      </div>
+      <ResponsiveContainer width="100%" height={1000}>
+        <Treemap
+          data={transformedData}
+          dataKey="size"
+          nameKey="name"
+          ratio={4 / 3}
+          stroke="#fff"
+          fill="#8884d8"
+          content={<CustomTreemapContent colors={['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0']} />}
+        >
+          <Tooltip />
+        </Treemap>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+export default CompanyRecord;

@@ -70,7 +70,7 @@ return (
             <div className='w-full flex flex-col gap-y-2'>
               <label className='text-heading-6' htmlFor="password">Password</label>
               <input
-              className='text-body-xl border-2 border-[#EE7F2B] rounded-lg h-12 placeholder:text-slate-400 px-4'
+              className='text-body-xl border-2 border-secondary-300 rounded-lg h-12 placeholder:text-slate-400 px-4'
               placeholder="Enter Password"
               type="password"
               id="password"
