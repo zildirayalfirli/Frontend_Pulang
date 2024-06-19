@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
+import axios from "axios";
 
 function RoomInput({ formData, setFormData }) {
-  const options = [
-    { label: "option1", value: 1 },
-    { label: "option2", value: 2 },
-    { label: "option3", value: 3 },
-  ];
-  const [selectedRoom, setSelectedRoom] = useState();
+  const [options, setOptions] = useState([]);
 
-  function handleSelect(event) {
-    setSelectedRoom(event.target.value);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/room")
+      .then((response) => {
+        const fetchedRooms = response.data.data;
+        const formattedOptions = fetchedRooms.map((room) => ({
+          label: `Room ${room.roomNumber} (${room.roomType})`,
+          value: room._id,
+        }));
+        setOptions(formattedOptions);
+      })
+      .catch((error) => {
+        console.error("Error fetching room data:", error);
+      });
+  }, []);
+
+  function handleSelect(selectedRooms) {
+    console.log("Selected Rooms:", selectedRooms);
+    if (selectedRooms.length > 0) {
+      // Extract the room number from the selected option
+      const selectedRoomNumber = selectedRooms[0].label
+        .replace("Room ", "")
+        .split(" ")[0];
+      setFormData({ ...formData, roomNumber: selectedRoomNumber });
+    }
   }
 
   return (
@@ -20,9 +39,10 @@ function RoomInput({ formData, setFormData }) {
         <Select
           name="room"
           options={options}
-          onChange={(selectedRoom) => setSelectedRoom(selectedRoom)}
-          searchable="true"
-        ></Select>
+          onChange={handleSelect}
+          searchable={true}
+          color="orange"
+        />
       </div>
     </div>
   );

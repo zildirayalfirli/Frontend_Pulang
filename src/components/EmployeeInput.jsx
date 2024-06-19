@@ -1,16 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
+import axios from "axios";
 
 function EmployeeInput({ formData, setFormData }) {
-  const options = [
-    { label: "option1", value: 1 },
-    { label: "option2", value: 2 },
-    { label: "option3", value: 3 },
-  ];
-  const [selectedEmployee, setSelectedEmployee] = useState();
+  const [options, setOptions] = useState([]);
 
-  function handleSelect(event) {
-    setSelectedEmployee(event.target.value);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/employee")
+      .then((response) => {
+        const fetchedEmployees = response.data.data;
+        const formattedOptions = fetchedEmployees.map((employee) => ({
+          label: `${employee.employeeName} (${employee.employeeDepartment})`,
+          value: employee._id,
+          employeeName: employee.employeeName,
+        }));
+        setOptions(formattedOptions);
+      })
+      .catch((error) => {
+        console.error("Error fetching employee data:", error);
+      });
+  }, []);
+
+  function handleSelect(selectedEmployees) {
+    console.log("Selected employee:", selectedEmployees);
+    if (selectedEmployees.length > 0) {
+      const selectedEmployee = selectedEmployees[0].employeeName;
+      setFormData({ ...formData, employee: selectedEmployee });
+    }
   }
 
   return (
@@ -20,7 +37,7 @@ function EmployeeInput({ formData, setFormData }) {
         <Select
           name="employee"
           options={options}
-          onChange={(selectedEmployee) => setSelectedEmployee(selectedEmployee)}
+          onChange={handleSelect}
           searchable="true"
         ></Select>
       </div>
