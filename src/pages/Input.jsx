@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useState } from "react";
+import ReservationForm from "../components/ReservationForm";
 
-export default function Input() {
+const Input = () => {
   return (
-    <div>Input</div>
-  )
-}
+    <div className="h-screen flex flex-col items-center justify-center bg-primary-100 rounded-lg border-2 border-[#EE7F2B]">
+      <div className="flex-grow w-2/5">
+        <ReservationForm />
+      </div>
+    </div>
+  );
+};
+
+export default Input;
