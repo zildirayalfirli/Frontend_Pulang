@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import GuestInput from "./GuestInput";
-import RoomInput from "./RoomInput";
-import EtcInput from "./EtcInput";
-import EmployeeInput from "./EmployeeInput";
-import DateInput from "./DateInput";
+import GuestInput from "./input/GuestInput";
+import RoomInput from "./input/RoomInput";
+import EtcInput from "./input/EtcInput";
+import EmployeeInput from "./input/EmployeeInput";
+import DateInput from "./input/DateInput";
 import axios from "axios";
 
 function ReservationForm() {
@@ -149,16 +149,16 @@ function ReservationForm() {
       alert("Error submitted form");
       console.error("There was an error submitting the reservation:", error);
     }
+    window.location.reload();
   };
 
   return (
     <>
-      <div className="text-2xl font-bold m-4 flex justify-center">
-        Reservation
-      </div>
-      <div className="form-container ">
+      <div className="form-container border-2 p-4 border-secondary-300 rounded-lg">
         <div className="header mb-[8px]">
-          <h2 className="text-heading-6">{FormPages[page].title}</h2>
+          <h2 className="text-heading-6 flex justify-center mb-4">
+            {FormPages[page].title}
+          </h2>
           <div
             style={{ whiteSpace: "pre-line" }}
             className="grid grid-cols-2 gap-[8px] "
