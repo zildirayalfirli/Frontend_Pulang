@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logoAdd from "../assets/Add Button.svg";
 import Select from "react-dropdown-select";
 import axios from "axios";
 
