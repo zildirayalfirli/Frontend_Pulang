@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import CityMap from './CityMap';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+} from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-const CityCount = ({ startDate, endDate }) => {
+const SegmentCountsBar = ({ startDate, endDate }) => {
+  const [segmentCounts, setSegmentCounts] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalNight, setTotalNight] = useState(0);
   const [error, setError] = useState(null);
@@ -20,8 +23,18 @@ const CityCount = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getCityCounts', { params });
+      console.log("Fetching data with params:", params);
+
+      const response = await axios.get('http://localhost:3000/vhp/getSegmentCounts', { params });
       if (response.data.success) {
+        console.log("Fetched data:", response.data.segmentCounts);
+        const segmentData = response.data.segmentCounts || {};
+        const transformedData = Object.keys(segmentData).map(segment => ({
+          segment,
+          count: segmentData[segment].count,
+          totalNight: segmentData[segment].totalNight
+        }));
+        setSegmentCounts(transformedData);
         setTotalRecords(response.data.totalRecords);
         setTotalNight(response.data.totalNight);
       } else {
@@ -30,7 +43,9 @@ const CityCount = ({ startDate, endDate }) => {
     } catch (error) {
       console.error('Error fetching segment counts:', error);
       setError('Error fetching data');
-    } setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -56,13 +71,26 @@ const CityCount = ({ startDate, endDate }) => {
           <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
           <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
           <div className='flex justify-center items-center mb-8 text-heading-3'>
-            City
+            Segment Counts
           </div>
-          <CityMap startDate={startDate} endDate={endDate} />
+          <ResponsiveContainer width="100%" height={600}>
+            <BarChart
+              data={segmentCounts}
+              margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="segment" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" stackId="a" fill="#8884d8" />
+              <Bar dataKey="totalNight" stackId="a" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
         </>
       )}
     </div>
   );
 };
 
-export default CityCount;
+export default SegmentCountsBar;

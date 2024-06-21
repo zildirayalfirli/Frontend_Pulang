@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { deleteUser, get } from '../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
-import Modal from '../components/Modal';
-import AddUserForm from '../components/AddUserForm';
-import UpdateUserForm from '../components/UpdateUserForm';
+import Modal from '../components/form/Modal';
+import AddUserForm from '../components/form/AddUserForm';
+import UpdateUserForm from '../components/form/UpdateUserForm';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [showUpdateUserForm, setShowUpdateUserForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -20,6 +23,8 @@ export default function Admin() {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     GetUsers();
@@ -27,6 +32,7 @@ export default function Admin() {
 
   const handleDelete = async (id) => {
     try {
+      setLoading(true);
       const response = await deleteUser(`/api/admin/delete/${id}`);
       if (response.status === 200) {
         toast.success(response.data.message);
@@ -36,6 +42,8 @@ export default function Admin() {
       if (error.response) {
         toast.error(error.response.data.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,7 +84,22 @@ export default function Admin() {
             <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>Role</div>
             <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>Actions</div>
         </div>
-          {users && users.map((elem, index) => (
+        {loading ? (
+          Array.from({ length: 5 }).map((_, index) => (
+            <div className='w-full h-20 flex justify-between text-body-xl divide-x-2' key={index}>
+              <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>
+                <Skeleton width={100} />
+              </div>
+              <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>
+                <Skeleton width={100} />
+              </div>
+              <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>
+                <Skeleton width={150} />
+              </div>
+            </div>
+          ))
+        ) : (
+          users.map((elem, index) => (
             <div className='w-full h-20 flex justify-between text-body-xl divide-x-2' key={index}>
               <div className='w-1/3 flex justify-center items-center py-2 px-4  border-b-2 border-black'>{elem.username}</div>
               <div className='w-1/3 flex justify-center items-center py-2 px-4  border-b-2 border-black'>{elem.role}</div>
@@ -85,7 +108,8 @@ export default function Admin() {
                 <button className='bg-red-500 hover:bg-red-600 h-10 w-20 text-white px-2 py-1 rounded-lg' onClick={() => handleDelete(elem._id)}>Delete</button>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
       {showAddUserForm && (
         <Modal onClose={handleCloseAddUserForm}>

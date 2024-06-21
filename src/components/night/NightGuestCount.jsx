@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Treemap, Tooltip, ResponsiveContainer } from 'recharts';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const CustomTreemapContent = ({ root, depth, x, y, width, height, index, payload, colors, rank, name }) => {
   return (
@@ -24,7 +26,7 @@ const CustomTreemapContent = ({ root, depth, x, y, width, height, index, payload
           textAnchor="middle"
           fill="#fff"
           style={{
-            fontSize: Math.min(width, height) / 30,
+            fontSize: Math.min(width, height) / 20,
             fontWeight: 'bold',
           }}
         >
@@ -35,9 +37,9 @@ const CustomTreemapContent = ({ root, depth, x, y, width, height, index, payload
   );
 };
 
-const CompanyRecord = ({ startDate, endDate }) => {
+const NightGuestCount = ({ startDate, endDate }) => {
   const [data, setData] = useState([]);
-  const [totalRepeater, setTotalRepeater] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,10 +53,10 @@ const CompanyRecord = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getSortedCompanyByRepeater', { params });
+      const response = await axios.get('http://localhost:3000/vhp/getSortedByNight', { params });
       if (response.data.success) {
-        setData(response.data.data || []);
-        setTotalRepeater(response.data.totalRepeater);
+        setData(response.data.sortedData || []);
+        setTotalRecords(response.data.totalRecords);
       } else {
         setError('Failed to fetch data');
       }
@@ -67,47 +69,50 @@ const CompanyRecord = ({ startDate, endDate }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
   }, [startDate, endDate]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
   }
 
-  if (!data.length) {
-    return <div>No data available for the selected date range.</div>;
-  }
-
   const transformedData = data.map(record => ({
-    name: record.Company_TA,
-    size: record.totalRepeater ?? 0,
+    name: record.Name,
+    size: record.Night ?? 0,
   }));
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
-      <div className="text-heading-6 mb-4">Total Record: {totalRepeater}</div>
-      <div className='flex justify-center items-center mb-8 text-heading-3'>
-        Top Company Repeater
-      </div>
-      <ResponsiveContainer width="100%" height={1000}>
-        <Treemap
-          data={transformedData}
-          dataKey="size"
-          nameKey="name"
-          ratio={4 / 3}
-          stroke="#fff"
-          fill="#8884d8"
-          content={<CustomTreemapContent colors={['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0']} />}
-        >
-          <Tooltip />
-        </Treemap>
-      </ResponsiveContainer>
+      {loading ? (
+        <>
+          <Skeleton height={30} width={150} />
+          <Skeleton height={40} width={100} className="mb-4" />
+          <Skeleton height={300} />
+        </>
+      ) : (
+        <>
+          <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
+          <div className='flex justify-center items-center mb-8 text-heading-3'>
+            Top Long Night Stay
+          </div>
+          <ResponsiveContainer width="100%" height={1000}>
+            <Treemap
+              data={transformedData}
+              dataKey="size"
+              nameKey="name"
+              ratio={4 / 3}
+              stroke="#fff"
+              fill="#8884d8"
+              content={<CustomTreemapContent colors={['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0']} />}
+            >
+              <Tooltip />
+            </Treemap>
+          </ResponsiveContainer>
+        </>
+      )}
     </div>
   );
 };
 
-export default CompanyRecord;
+export default NightGuestCount;

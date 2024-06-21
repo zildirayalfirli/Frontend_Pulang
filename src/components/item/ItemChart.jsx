@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -14,13 +16,14 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, Title);
 
-const RoomCountsChart = ({ startDate, endDate }) => {
-  const [roomCounts, setRoomCounts] = useState({});
+const ItemChart = ({ startDate, endDate }) => {
+  const [segmentCounts, setSegmentCounts] = useState({});
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalNight, setTotalNight] = useState(0);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const fetchRoomCounts = async (startDate, endDate) => {
+  const fetchSegmentCounts = async (startDate, endDate) => {
     try {
       const params = {};
       if (startDate && endDate) {
@@ -30,22 +33,28 @@ const RoomCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getRoomCounts', { params });
+      console.log("Fetching data with params:", params);
+
+      const response = await axios.get('http://localhost:3000/vhp/getSegmentCounts', { params });
       if (response.data.success) {
-        setRoomCounts(response.data.roomtypeCounts);
+        console.log("Fetched data:", response.data.segmentCounts);
+        setSegmentCounts(response.data.segmentCounts);
         setTotalRecords(response.data.totalRecords);
         setTotalNight(response.data.totalNight);
       } else {
         setError('Failed to fetch data');
       }
     } catch (error) {
-      console.error('Error fetching room counts:', error);
+      console.error('Error fetching segment counts:', error);
       setError('Error fetching data');
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRoomCounts(startDate, endDate);
+    setLoading(true);
+    fetchSegmentCounts(startDate, endDate);
   }, [startDate, endDate]);
 
   if (error) {
@@ -99,13 +108,13 @@ const RoomCountsChart = ({ startDate, endDate }) => {
   ];
 
   const data = {
-    labels: Object.keys(roomCounts),
+    labels: Object.keys(segmentCounts),
     datasets: [
       {
-        label: 'Room Counts',
-        data: Object.values(roomCounts).map(room => room.count),
-        backgroundColor: colors.slice(0, Object.keys(roomCounts).length),
-        borderColor: borderColor.slice(0, Object.keys(roomCounts).length),
+        label: 'Segment Counts',
+        data: Object.values(segmentCounts).map(segment => segment.count),
+        backgroundColor: colors.slice(0, Object.keys(segmentCounts).length),
+        borderColor: borderColor.slice(0, Object.keys(segmentCounts).length),
         borderWidth: 1,
       },
     ],
@@ -119,9 +128,9 @@ const RoomCountsChart = ({ startDate, endDate }) => {
       tooltip: {
         callbacks: {
           label: function(context) {
-            const roomType = context.label;
-            const room = roomCounts[roomType];
-            return `${roomType}: ${room.count} records, ${room.totalNight} nights`;
+            const segment = context.label;
+            const segmentData = segmentCounts[segment];
+            return `${segment}: ${segmentData.count} records, ${segmentData.totalNight} nights`;
           }
         }
       }
@@ -130,14 +139,25 @@ const RoomCountsChart = ({ startDate, endDate }) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
-      <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
-      <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
-      <div className='flex justify-center items-center mb-8 text-heading-3'>
-        Room
-      </div>
-      <Bar data={data} options={options} />
+      {loading ? (
+        <>
+          <Skeleton height={30} width={150} />
+          <Skeleton height={30} width={150} />
+          <Skeleton height={40} width={100} className="mb-4" />
+          <Skeleton height={300} />
+        </>
+      ) : (
+        <>
+          <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
+          <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
+          <div className='flex justify-center items-center mb-8 text-heading-3'>
+            Item
+          </div>
+          <Bar data={data} options={options} />
+        </>
+      )}
     </div>
   );
 };
 
-export default RoomCountsChart;
+export default ItemChart;

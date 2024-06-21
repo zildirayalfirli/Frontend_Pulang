@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import NationalityCountsMap from './NationalityCountsMap';
+import CountryMap from './CountryMap';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const CountryCount = ({ startDate, endDate }) => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalNight, setTotalNight] = useState(0);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchSegmentCounts = async (startDate, endDate) => {
     try {
@@ -27,10 +30,13 @@ const CountryCount = ({ startDate, endDate }) => {
     } catch (error) {
       console.error('Error fetching segment counts:', error);
       setError('Error fetching data');
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchSegmentCounts(startDate, endDate);
   }, [startDate, endDate]);
 
@@ -40,12 +46,23 @@ const CountryCount = ({ startDate, endDate }) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
-      <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
-      <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
-      <div className='flex justify-center items-center mb-8 text-heading-3'>
-        Country
-      </div>
-      <NationalityCountsMap startDate={startDate} endDate={endDate} />
+      {loading ? (
+        <>
+          <Skeleton height={30} width={150} />
+          <Skeleton height={30} width={150} />
+          <Skeleton height={40} width={100} className="mb-4" />
+          <Skeleton height={300} />
+        </>
+      ) : (
+        <>
+          <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
+          <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
+          <div className='flex justify-center items-center mb-8 text-heading-3'>
+            Country
+          </div>
+          <CountryMap startDate={startDate} endDate={endDate} />
+        </>
+      )}
     </div>
   );
 };

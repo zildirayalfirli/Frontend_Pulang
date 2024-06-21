@@ -1,5 +1,5 @@
 import React from 'react';
-import closebutton from "../assets/x.svg";
+import closebutton from "../../assets/x.svg";
 
 export default function Modal({ title, children, onClose }) {
   return (
