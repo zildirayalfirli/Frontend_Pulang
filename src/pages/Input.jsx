@@ -10,14 +10,14 @@ const Input = () => {
   };
 
   return (
-    <div className="h-auto min-h-screen flex flex-col items-center bg-primary-100 rounded-lg border-2 border-[#EE7F2B] py-6">
+    <div className="h-auto max-w-[1600px] min-h-screen flex flex-col items-center bg-primary-100 rounded-lg border-2 border-[#EE7F2B] py-6">
       <div className="text-heading-2 font-bold m-4 flex justify-center">
         Reservation
       </div>
       <div className="w-full flex justify-start pl-4 ml-[300px]">
         <button
           onClick={toggleForm}
-          className="bg-[#EE7F2B] text-white px-4 py-2 rounded-lg mb-4"
+          className="bg-secondary-300 hover:bg-secondary-500 text-white px-4 py-2 rounded-lg mb-4"
         >
           {showForm ? "Hide Reservation Form" : "Show Reservation Form"}
         </button>
@@ -27,7 +27,7 @@ const Input = () => {
           <ReservationForm />
         </div>
       )}
-      <div className="w-4/5">
+      <div className="w-full p-8">
         <DataTable />
       </div>
     </div>
