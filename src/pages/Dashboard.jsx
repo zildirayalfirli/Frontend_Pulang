@@ -17,8 +17,8 @@ import CategoryChart from '../components/category/CategoryChart';
 import PurposeChart from '../components/purpose/PurposeChart';
 import EscortChart from '../components/escort/EscortChart';
 import ItemChart from '../components/item/ItemChart';
-import RequestChart from '../components/request/RequestChart';
 import PriorityTable from '../components/priorities/PriorityTable';
+import CommentChart from '../components/comment/CommentChart';
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(null);
@@ -87,31 +87,28 @@ const Dashboard = () => {
 
       <div className="flex flex-col gap-8">
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+          {renderContent(PriorityTable, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(AgeCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
-          {renderContent(ItemChart, { startDate: dateRange.start, endDate: dateRange.end })}
-          {renderContent(RequestChart, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(CityCount, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(CountryCount, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(OccupationCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(SegmentCountsBar, { startDate: dateRange.start, endDate: dateRange.end })}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {renderContent(SexCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
-          {renderContent(PurposeChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(CategoryChart, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(PurposeChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(EscortChart, { startDate: dateRange.start, endDate: dateRange.end })}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+          {renderContent(ItemChart, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(CommentChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(NightGuestCount, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(RepeaterGuestCount, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(CompanyRecord, { startDate: dateRange.start, endDate: dateRange.end })}
-          {renderContent(OccupationCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(RoomCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
-          {renderContent(SegmentCountsBar, { startDate: dateRange.start, endDate: dateRange.end })}
-          {renderContent(PriorityTable, { startDate: dateRange.start, endDate: dateRange.end })}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
-          {renderContent(CityCount, { startDate: dateRange.start, endDate: dateRange.end })}
-          {renderContent(CountryCount, { startDate: dateRange.start, endDate: dateRange.end })}
         </div>
       </div>
     </div>
