@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Treemap, Tooltip, ResponsiveContainer } from 'recharts';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const CustomTreemapContent = ({ root, depth, x, y, width, height, index, payload, colors, rank, name }) => {
     return (
@@ -67,12 +69,9 @@ const RepeaterGuestCount = ({ startDate, endDate }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
   }, [startDate, endDate]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
@@ -85,23 +84,33 @@ const RepeaterGuestCount = ({ startDate, endDate }) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
-      <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
-      <div className='flex justify-center items-center mb-8 text-heading-3'>
-        Top Guest Repeater
-      </div>
-      <ResponsiveContainer width="100%" height={1000}>
-        <Treemap
-          data={transformedData}
-          dataKey="size"
-          nameKey="name"
-          ratio={4 / 3}
-          stroke="#fff"
-          fill="#8884d8"
-          content={<CustomTreemapContent colors={['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0']} />}
-        >
-          <Tooltip />
-        </Treemap>
-      </ResponsiveContainer>
+      {loading ? (
+        <>
+          <Skeleton height={30} width={150} />
+          <Skeleton height={40} width={100} className="mb-4" />
+          <Skeleton height={300} />
+        </>
+      ) : (
+        <>
+          <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
+          <div className='flex justify-center items-center mb-8 text-heading-3'>
+            Top Guest Repeater
+          </div>
+          <ResponsiveContainer width="100%" height={1000}>
+            <Treemap
+              data={transformedData}
+              dataKey="size"
+              nameKey="name"
+              ratio={4 / 3}
+              stroke="#fff"
+              fill="#8884d8"
+              content={<CustomTreemapContent colors={['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0']} />}
+            >
+              <Tooltip />
+            </Treemap>
+          </ResponsiveContainer>
+        </>
+      )}
     </div>
   );
 };

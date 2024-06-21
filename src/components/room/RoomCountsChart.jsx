@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import CityMap from './CityMap';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+} from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-const CityCount = ({ startDate, endDate }) => {
+const RoomCountsChart = ({ startDate, endDate }) => {
+  const [roomCounts, setRoomCounts] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalNight, setTotalNight] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchSegmentCounts = async (startDate, endDate) => {
+  const fetchRoomCounts = async (startDate, endDate) => {
     try {
       const params = {};
       if (startDate && endDate) {
@@ -20,22 +23,31 @@ const CityCount = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getCityCounts', { params });
+      const response = await axios.get('http://localhost:3000/vhp/getRoomCounts', { params });
       if (response.data.success) {
+        const roomData = response.data.roomtypeCounts || {};
+        const transformedData = Object.keys(roomData).map(room => ({
+          room,
+          count: roomData[room].count,
+          totalNight: roomData[room].totalNight
+        }));
+        setRoomCounts(transformedData);
         setTotalRecords(response.data.totalRecords);
         setTotalNight(response.data.totalNight);
       } else {
         setError('Failed to fetch data');
       }
     } catch (error) {
-      console.error('Error fetching segment counts:', error);
+      console.error('Error fetching room counts:', error);
       setError('Error fetching data');
-    } setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     setLoading(true);
-    fetchSegmentCounts(startDate, endDate);
+    fetchRoomCounts(startDate, endDate);
   }, [startDate, endDate]);
 
   if (error) {
@@ -56,13 +68,26 @@ const CityCount = ({ startDate, endDate }) => {
           <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
           <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
           <div className='flex justify-center items-center mb-8 text-heading-3'>
-            City
+            Room Counts
           </div>
-          <CityMap startDate={startDate} endDate={endDate} />
+          <ResponsiveContainer width="100%" height={600}>
+            <BarChart
+              data={roomCounts}
+              margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="room" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" stackId="a" fill="#8884d8" />
+              <Bar dataKey="totalNight" stackId="a" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
         </>
       )}
     </div>
   );
 };
 
-export default CityCount;
+export default RoomCountsChart;

@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
-import { post } from '../services/ApiEndpoint';
+import React, { useState, useEffect } from 'react';
+import { put } from '../../services/ApiEndpoint';
 import { toast } from 'react-hot-toast';
 
-export default function AddUserForm({ onClose, onSuccess }) {
+export default function UpdateUserForm({ user, onClose, onSuccess }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
   const [role, setRole] = useState('user');
 
-  const handleAddUserSubmit = async (e) => {
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username);
+      setRole(user.role);
+    }
+  }, [user]);
+
+  const handleUpdateUserSubmit = async (e) => {
     e.preventDefault();
-    if (password !== passwordAgain) {
+    if (password && password !== passwordAgain) {
       toast.error('Passwords do not match');
       return;
     }
     try {
-      const response = await post('/api/admin/adduser', { username, password, passwordAgain, role });
+      const response = await put('/api/admin/updateuser', { userId: user._id, username, password, passwordAgain, role });
       if (response.status === 200) {
         toast.success(response.data.message);
-        onSuccess(response.data.newUser);
+        onSuccess(response.data.user);
         onClose();
       }
     } catch (error) {
@@ -34,11 +41,11 @@ export default function AddUserForm({ onClose, onSuccess }) {
   return (
     <div className='flex flex-col gap-y-2 mb-4'>
       <div className='text-black text-center text-heading-5'>
-        <h2>Add New User or Admin</h2>
+        <h2>Update User</h2>
       </div>
 
-    <form onSubmit={handleAddUserSubmit}>
-      <div className='mt-4'>
+    <form onSubmit={handleUpdateUserSubmit}>
+    <div className='mt-4'>
         <label htmlFor='username' className='mb-2 block text-body-xl text-gray-700'>Username</label>
         <input
           type='text'
@@ -85,7 +92,7 @@ export default function AddUserForm({ onClose, onSuccess }) {
       </div>
       <div className='mt-8 flex justify-start gap-4'>
         <button type='submit' className='inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-body-l text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-auto'>
-          Add User
+          Update User
         </button>
         <button type='button' onClick={onClose} className='inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-500 text-body-l text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-auto'>
           Cancel

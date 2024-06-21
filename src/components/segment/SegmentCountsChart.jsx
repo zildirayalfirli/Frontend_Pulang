@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import axios from 'axios';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -15,6 +17,7 @@ const SegmentCountsChart = ({ startDate, endDate }) => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalNight, setTotalNight] = useState(0);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchSegmentCounts = async (startDate, endDate) => {
     try {
@@ -37,10 +40,13 @@ const SegmentCountsChart = ({ startDate, endDate }) => {
     } catch (error) {
       console.error('Error fetching segment counts:', error);
       setError('Error fetching data');
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchSegmentCounts(startDate, endDate);
   }, [startDate, endDate]);
 
@@ -122,12 +128,23 @@ const SegmentCountsChart = ({ startDate, endDate }) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
-      <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
-      <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
-      <div className='flex justify-center items-center mb-8 text-heading-3'>
-        Segment
-      </div>
-      <Pie data={data} options={options}/>
+      {loading ? (
+        <>
+          <Skeleton height={30} width={150} />
+          <Skeleton height={30} width={150} />
+          <Skeleton height={40} width={100} className="mb-4" />
+          <Skeleton height={300} />
+        </>
+      ) : (
+        <>
+          <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
+          <div className="text-heading-6 mb-4">Total Nights: {totalNight}</div>
+          <div className='flex justify-center items-center mb-8 text-heading-3'>
+            Segment
+          </div>
+          <Pie data={data} options={options}/>
+        </>
+      )}
     </div>
   );
 };
