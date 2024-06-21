@@ -74,11 +74,11 @@ export default function Admin() {
 
   return (
     <div className='container mx-auto p-4 bg-primary-100 border-2 border-secondary-300 rounded-lg'>
-      <h2 className='text-heading-2 font-bold mb-4 flex justify-center'>Manage Users</h2>
+      <h2 className='text-heading-2 mb-4 flex justify-center'>Manage Users</h2>
       <div className='flex mt-8 justify-end'>
         <button className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg' onClick={handleAddUser}>Add User</button>
       </div>
-      <div className='bg-primary-300 mt-4 w-full border-t-2 border-x-2 border-black rounded-lg'>
+      <div className='bg-primary-100 mt-4 w-full border-t-2 border-x-2 border-black rounded-lg'>
         <div className='w-full flex justify-between text-heading-6 divide-x-2'>
             <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>Username</div>
             <div className='w-1/3 flex justify-center items-center py-2 px-4 border-b-2 border-black'>Role</div>
