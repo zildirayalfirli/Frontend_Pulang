@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import axios from 'axios';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -10,10 +12,11 @@ import {
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const SexCountsChart = ({ startDate, endDate }) => {
+const EscortChart = ({ startDate, endDate }) => {
   const [sexCounts, setSexCounts] = useState({});
   const [totalRecords, setTotalRecords] = useState(0);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchSexCounts = async (startDate, endDate) => {
     try {
@@ -36,9 +39,13 @@ const SexCountsChart = ({ startDate, endDate }) => {
       console.error('Error fetching sex counts:', error);
       setError('Error fetching data');
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchSexCounts(startDate, endDate);
   }, [startDate, endDate]);
 
@@ -75,13 +82,23 @@ const SexCountsChart = ({ startDate, endDate }) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
-      <div className="text-heading-6 mb-4">Total Records: {totalRecords}</div>
-      <div className='flex justify-center items-center mb-4 text-heading-5'>
-        Gender
-      </div>
-      <Pie data={data} />
+      {loading ? (
+        <>
+          <Skeleton height={30} width={150} />
+          <Skeleton height={40} width={100} className="mb-4" />
+          <Skeleton height={300} />
+        </>
+      ) : (
+        <>
+          <div className="text-heading-6 mb-10">Total Records: {totalRecords}</div>
+            <div className='flex justify-center items-center mb-8 text-heading-5'>
+                Escort
+          </div>
+          <Pie data={data} />
+        </>
+      )}
     </div>
   );
 };
 
-export default SexCountsChart;
+export default EscortChart;

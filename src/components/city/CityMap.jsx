@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
-import { nationalityCoordinates } from './DataCountry';
+import { cityCoordinates } from './DataCity';
 
-const NationalityCountsMap = ({ startDate, endDate }) => {
-  const [nationalityCounts, setNationalityCounts] = useState({});
+const CityMap = ({ startDate, endDate }) => {
+  const [cityCounts, setCityCounts] = useState({});
   const [error, setError] = useState(null);
 
-  const fetchNationalityCounts = async (startDate, endDate) => {
+  const fetchCityCounts = async (startDate, endDate) => {
     try {
       const params = {};
       if (startDate && endDate) {
@@ -18,23 +18,20 @@ const NationalityCountsMap = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      console.log("Fetching data with params:", params);
-
-      const response = await axios.get('http://localhost:3000/vhp/getCountryCounts', { params });
+      const response = await axios.get('http://localhost:3000/vhp/getCityCounts', { params });
       if (response.data.success) {
-        console.log("Fetched data:", response.data.nationalityCounts);
-        setNationalityCounts(response.data.nationalityCounts);
+        setCityCounts(response.data.localregionCounts);
       } else {
         setError('Failed to fetch data');
       }
     } catch (error) {
-      console.error('Error fetching nationality counts:', error);
+      console.error('Error fetching city counts:', error);
       setError('Error fetching data');
     }
   };
 
   useEffect(() => {
-    fetchNationalityCounts(startDate, endDate);
+    fetchCityCounts(startDate, endDate);
   }, [startDate, endDate]);
 
   if (error) {
@@ -42,16 +39,17 @@ const NationalityCountsMap = ({ startDate, endDate }) => {
   }
 
   return (
-    <MapContainer center={[20, 20]} zoom={2.5} scrollWheelZoom={false} style={{ height: '1000px', width: '100%' }}>
+    <MapContainer center={[-2.548926, 115.0148634]} zoom={4} scrollWheelZoom={false} style={{ height: '600px', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {Object.entries(nationalityCounts).map(([nationality, { count, totalNight }]) => {
-        const coordinates = nationalityCoordinates[nationality] || [0, 0];
+      {Object.entries(cityCounts).map(([city, { count, totalNight }]) => {
+        const coordinates = cityCoordinates[city];
+        if (!coordinates) return null;
         return (
           <CircleMarker
-            key={nationality}
+            key={city}
             center={coordinates}
             radius={Math.sqrt(count) * 2}
             color="blue"
@@ -59,7 +57,7 @@ const NationalityCountsMap = ({ startDate, endDate }) => {
             fillOpacity={0.5}
           >
             <Tooltip direction="top" offset={[0, -10]} opacity={1}>
-              <span>{`${nationality}: ${count} records, ${totalNight} nights`}</span>
+              <span>{`${city}: ${count} records, ${totalNight} nights`}</span>
             </Tooltip>
           </CircleMarker>
         );
@@ -68,4 +66,4 @@ const NationalityCountsMap = ({ startDate, endDate }) => {
   );
 };
 
-export default NationalityCountsMap;
+export default CityMap;

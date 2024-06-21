@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import logologin from "../assets/Logo-pulang-hitam 1.svg";
-import logoUpload from "../assets/upload.svg";
-import logoDashboard from "../assets/trello.svg";
-import logoInput from "../assets/edit.svg";
-import logoManageUser from "../assets/user.svg";
-import logoLogout from "../assets/log-out.svg";
+import logologin from "../../assets/Logo-pulang-hitam 1.svg";
+import logoUpload from "../../assets/upload.svg";
+import logoDashboard from "../../assets/trello.svg";
+import logoInput from "../../assets/edit.svg";
+import logoManageUser from "../../assets/user.svg";
+import logoLogout from "../../assets/log-out.svg";
 
 export default function Sidebar() {
   const user = useSelector((state) => state.Auth.user);
 
   return (
-    <div className="sidebar bg-secondary-300 text-white w-64 h-full border-r-2 border-black fixed z-10">
+    <div className="sidebar bg-secondary-300 text-white w-[15%] h-full fixed z-10">
       <div className="sidebar-header p-4 font-bold">
         <div className="py-6 flex justify-center border-b-2">
           <img src={logologin} alt="logo login" className="w-2/3 h-auto" />
