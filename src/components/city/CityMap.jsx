@@ -39,7 +39,7 @@ const CityMap = ({ startDate, endDate }) => {
   }
 
   return (
-    <MapContainer center={[-2.548926, 115.0148634]} zoom={4} scrollWheelZoom={false} style={{ height: '600px', width: '100%' }}>
+    <MapContainer center={[-2.548926, 125.0148634]} zoom={5} scrollWheelZoom={false} style={{ height: '600px', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

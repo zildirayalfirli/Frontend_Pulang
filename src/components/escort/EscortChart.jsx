@@ -140,7 +140,7 @@ const EscortChart = ({ startDate, endDate }) => {
             <div className="text-heading-6">Total Records: {totalRecords}</div>
             <div className="text-heading-6">Total Nights: {totalNight}</div>
           </div>
-          <div className='flex justify-center items-center mb-8 text-heading-5'>
+          <div className='flex justify-center items-center mb-8 text-heading-3'>
             Escort
           </div>
           <Pie data={data} options={options}/>
