@@ -81,7 +81,7 @@ const CategoryChart = ({ startDate, endDate }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
+    <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col border-2 border-black">
       {loading ? (
         <>
           <Skeleton height={30} width={150} />

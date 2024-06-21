@@ -19,6 +19,7 @@ import PurposeChart from '../components/purpose/PurposeChart';
 import EscortChart from '../components/escort/EscortChart';
 import ItemChart from '../components/item/ItemChart';
 import RequestChart from '../components/request/RequestChart';
+import PriorityTable from '../components/priorities/PriorityTable';
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(null);
@@ -51,7 +52,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="container mx-auto p-8 border-2 rounded-lg border-secondary-300">
+    <div className="container mx-auto p-8 border-2 bg-white rounded-lg border-secondary-300">
       <div className="flex justify-center mb-10">
         <h1 className="text-heading-1">Dashboard</h1>
       </div>
@@ -117,7 +118,7 @@ const Dashboard = () => {
           {renderContent(OccupationCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(RoomCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(SegmentCountsBar, { startDate: dateRange.start, endDate: dateRange.end })}
-          
+          {renderContent(PriorityTable, { startDate: dateRange.start, endDate: dateRange.end })}
         </div>
 
         <div className='flex justify-center items-center w-full gap-8'>
@@ -127,7 +128,7 @@ const Dashboard = () => {
           <div className='flex justify-center g flex-wrap w-1/2 h-fit'>
             {renderContent(CountryCount, { startDate: dateRange.start, endDate: dateRange.end })}
           </div>
-          </div>
+        </div>
 
       </div>
     </div>
