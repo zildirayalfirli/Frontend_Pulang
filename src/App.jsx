@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Register from './pages/Register';
+// import Register from './pages/Register';
 import Admin from './pages/Admin';
 import { Toaster } from 'react-hot-toast';
 import AdminLayouts from './Layouts/AdminLayouts';
@@ -44,7 +44,7 @@ export default function App() {
 
           <Route path='/' element={<PublicLayouts />}>
             <Route path='login' element={<Login />} />
-            <Route path='register' element={<Register />} />
+            {/* <Route path='register' element={<Register />} /> */}
           </Route>
 
         </Routes>

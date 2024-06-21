@@ -24,8 +24,7 @@ export default function LogOut() {
     }
   }
   return (
-
-    <div className='container mx-auto rounded-lg bg-secondary-300 h-screen flex flex-col items-center justify-center gap-y-24 border-2 border-black'>
+    <div className='container mx-auto p-4 rounded-lg bg-secondary-300 h-screen flex flex-col items-center justify-center gap-y-24 border-2 border-black'>
       <div className='mt-20 flex justify-center'>
         <img src={logologin} alt="logo login" className="w-3/4 h-auto" />
       </div>

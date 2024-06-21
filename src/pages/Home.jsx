@@ -7,7 +7,7 @@ export default function Home() {
   console.log(user)
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto">
       <FileUpload />
     </div>
   )

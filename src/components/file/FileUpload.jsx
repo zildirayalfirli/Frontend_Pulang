@@ -79,8 +79,9 @@ function FileUpload() {
 
   return (
     <div className="h-fit w-full">
-      <div className="py-8 px-4 w-full flex flex-col items-center justify-center bg-primary-100 rounded-lg border-2 border-[#EE7F2B]">
-        <div className="bg-primary-300 p-8 w-1/2 rounded-lg shadow-lg border-2 border-black">
+      <div className="p-4 w-full flex flex-col items-center justify-center bg-primary-100 rounded-lg border-2 border-[#EE7F2B]">
+        <h2 className='text-heading-2 mb-8 flex justify-center'>Upload File</h2>
+        <div className="bg-primary-100 p-8 w-1/2 rounded-lg shadow-lg border-2 border-black">
           <form className="flex flex-col items-center" onSubmit={submitFile}>
             <label className="w-full flex flex-col border-dashed border-2 border-[#EE7F2B] items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-secondary-300 hover:text-white">
               <FaArrowUp className="h-8 w-8" />
@@ -111,7 +112,7 @@ function FileUpload() {
           </form>
         </div>
 
-        <div className="w-full border-2 border-black max-w-4xl mt-10 py-4 px-8 bg-primary-300 rounded-lg shadow-lg">
+        <div className="w-full border-2 border-black max-w-4xl mt-10 py-4 px-8 bg-primary-100 rounded-lg shadow-lg">
           <h4 className="text-xl font-bold mt-2 mb-6">Uploaded CSV Files:</h4>
           <div className="border-t border-black">
             {loading ? (

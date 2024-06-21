@@ -35,7 +35,7 @@ export default function Login() {
       console.log(error);
       if (error.response && error.response.status === 404) {
         toast.error(
-          error.response.data.message || "Username Or Password Is Incorect"
+          error.response.data.message || "Username Or Password Is Incorrect"
         );
       } else {
         toast.error("An error occurred. Please try again later.");
@@ -44,20 +44,20 @@ export default function Login() {
   };
 
   return (
-    <div className="h-screen bg-secondary-300 flex flex-col gap-y-24">
-      <div className="mt-20 flex justify-center">
-        <img src={logologin} alt="logo login" className="w-1/4 h-auto" />
-      </div>
+    <div className="h-screen bg-secondary-300 flex ustify-center items-center">
+      <div className="flex flex-col gap-10 items-center w-full max-w-lg mx-auto px-4">
+        <div className="flex justify-center">
+          <img src={logologin} alt="logo login" className="w-2/3 h-auto" />
+        </div>
 
-      <div className="flex justify-center items-center">
-        <div className="h-[500px] w-[500px] p-8 bg-white rounded-xl border-2 border-black">
-          <div className="w-full h-full gap-y-8 flex flex-col items-center justify-center">
-            <div className="text-black text-heading-3">
+        <div className="w-full p-8 bg-white rounded-xl border-2 border-black shadow-lg">
+          <div className="w-full flex flex-col items-center">
+            <div className="text-black text-heading-3 mb-8">
               <h2>Login</h2>
             </div>
 
             <form
-              className="w-4/5 flex flex-col gap-y-8"
+              className="w-full flex flex-col gap-y-4"
               onSubmit={handleSubmit}
             >
               <div className="w-full flex flex-col gap-y-2">
@@ -91,10 +91,6 @@ export default function Login() {
                   Login
                 </button>
               </div>
-
-              {/*<p className='register-link'>
-            Not registered? <Link to={'/register'}>Register here</Link>
-            </p>*/}
             </form>
           </div>
         </div>

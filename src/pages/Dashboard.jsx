@@ -6,7 +6,6 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import AgeCountsChart from '../components/age/AgeCountsChart';
 import SexCountsChart from '../components/sex/SexCountsChart';
 import OccupationCountsChart from '../components/occupation/OccupationCountsChart';
-// import SegmentCountsChart from '../components/segment/SegmentCountsChart';
 import CountryCount from '../components/country/CountryCount';
 import CityCount from '../components/city/CityCount';
 import RoomCountsChart from '../components/room/RoomCountsChart';
@@ -30,7 +29,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!search) {
-      // Reset date range if search is not triggered
       setDateRange({ start: null, end: null });
     }
     setLoading(false);
@@ -41,7 +39,7 @@ const Dashboard = () => {
       setDateRange({ start: startDate, end: endDate });
       setLoading(true);
       setSearch(true);
-      setTimeout(() => setLoading(false), 1000); // Simulate loading delay
+      setTimeout(() => setLoading(false), 1000);
     } else {
       alert('Please select both start and end dates.');
     }
@@ -52,66 +50,56 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="container mx-auto p-8 border-2 bg-white rounded-lg border-secondary-300">
+    <div className="container mx-auto p-4 border-2 bg-white rounded-lg border-secondary-300">
       <div className="flex justify-center mb-10">
-        <h1 className="text-heading-1">Dashboard</h1>
+        <h1 className="text-heading-2">Dashboard</h1>
       </div>
-      <div className="flex justify-center items-center mb-6 mx-4 p-4  rounded-lg">
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          selectsStart
-          startDate={startDate}
-          endDate={endDate}
-          placeholderText="Start Date"
-          className="border border-black rounded p-2"
-        />
-        <span className="mx-2">-</span>
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          placeholderText="End Date"
-          className="border border-black rounded p-2"
-        />
+      <div className="flex flex-col w-fit items-center mb-6 mx-auto p-4 border-2 border-black rounded-lg gap-4">
+        <div className="flex justify-center">
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            placeholderText="Start Date"
+            className="border border-black rounded p-2"
+          />
+          <span className="mx-2 my-auto">-</span>
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            placeholderText="End Date"
+            className="border border-black rounded p-2"
+          />
+        </div>
+
         <button
           onClick={handleSearch}
-          className="ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
           Search
         </button>
       </div>
-      <div className='flex flex-col justify-center items-center gap-8 p-4'>
-        <div className='flex flex-col justify-center gap-8 w-full'>
+
+      <div className="flex flex-col gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {renderContent(AgeCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(ItemChart, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(RequestChart, { startDate: dateRange.start, endDate: dateRange.end })}
         </div>
 
-        <div className='flex justify-center gap-8 w-full'>
-            <div className='w-1/2'>
-              {renderContent(SexCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
-            </div>
-            {/* <div className='w-1/3'>
-              {renderContent(SegmentCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
-            </div> */}
-            <div className='w-1/2'>
-              {renderContent(PurposeChart, { startDate: dateRange.start, endDate: dateRange.end })}
-            </div>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {renderContent(SexCountsChart, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(PurposeChart, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(CategoryChart, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(EscortChart, { startDate: dateRange.start, endDate: dateRange.end })}
+        </div>
 
-          <div className='flex justify-center gap-8 w-full'>
-            <div className='w-1/2'>
-              {renderContent(CategoryChart, { startDate: dateRange.start, endDate: dateRange.end })}
-            </div>
-            <div className='w-1/2'>
-              {renderContent(EscortChart, { startDate: dateRange.start, endDate: dateRange.end })}
-            </div>
-          </div>
-
-        <div className='flex justify-center gap-8 flex-wrap w-full h-fit'>
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {renderContent(NightGuestCount, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(RepeaterGuestCount, { startDate: dateRange.start, endDate: dateRange.end })}
           {renderContent(CompanyRecord, { startDate: dateRange.start, endDate: dateRange.end })}
@@ -121,15 +109,10 @@ const Dashboard = () => {
           {renderContent(PriorityTable, { startDate: dateRange.start, endDate: dateRange.end })}
         </div>
 
-        <div className='flex justify-center items-center w-full gap-8'>
-          <div className='flex justify-center flex-wrap w-1/2 h-fit'>
-            {renderContent(CityCount, { startDate: dateRange.start, endDate: dateRange.end })}
-          </div>
-          <div className='flex justify-center g flex-wrap w-1/2 h-fit'>
-            {renderContent(CountryCount, { startDate: dateRange.start, endDate: dateRange.end })}
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+          {renderContent(CityCount, { startDate: dateRange.start, endDate: dateRange.end })}
+          {renderContent(CountryCount, { startDate: dateRange.start, endDate: dateRange.end })}
         </div>
-
       </div>
     </div>
   );

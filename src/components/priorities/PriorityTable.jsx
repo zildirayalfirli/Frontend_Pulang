@@ -2,7 +2,9 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
+import { styled } from "@mui/material/styles";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
@@ -35,6 +37,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function PriorityTable() {
   const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -50,6 +53,7 @@ export default function PriorityTable() {
           guestPriority: data.guestPriority,
         }));
         setRows(transformedData);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -57,18 +61,35 @@ export default function PriorityTable() {
   }, []);
 
   return (
+    <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col border-2 border-black">
     <div style={{ height: 400, width: "100%" }}>
-      <StyledDataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-      />
+      {loading ? (
+        <div>
+          <Skeleton height={30} width={70} />
+          <Skeleton height={30} width={300} />
+          <Skeleton height={30} width={300} />
+          {[...Array(5)].map((_, index) => (
+            <div key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Skeleton height={30} width={70} />
+              <Skeleton height={30} width={300} />
+              <Skeleton height={30} width={300} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <StyledDataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+        />
+      )}
+    </div>
     </div>
   );
 }

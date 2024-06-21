@@ -14,9 +14,9 @@ export default function AdminLayouts() {
   }, [user, navigate]);
 
   return (
-    <div className="flex bg-primary-300">
+    <div className="flex bg-primary-300 min-h-screen w-full">
       <Sidebar />
-      <div className="flex-1 ml-64 p-4">
+      <div className="ml-64 p-4 w-full">
         <Outlet />
       </div>
     </div>
