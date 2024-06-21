@@ -154,7 +154,7 @@ function ReservationForm() {
 
   return (
     <>
-      <div className="form-container border-2 p-4 border-secondary-300 rounded-lg">
+      <div className="form-container border-2 p-4 border-secondary-300 rounded-lg shadow-lg">
         <div className="header mb-[8px]">
           <h2 className="text-heading-6 flex justify-center mb-4">
             {FormPages[page].title}
@@ -175,7 +175,7 @@ function ReservationForm() {
         <div className="body my-[24px]">{PageDisplay()}</div>
         <div className="footer">
           <button
-            className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+            className="bg-primary-500 hover:bg-tertiary-100 text-white px-4 py-2 rounded mr-2"
             onClick={() => {
               setPage((currPage) => currPage - 1);
             }}
@@ -184,7 +184,7 @@ function ReservationForm() {
             Prev
           </button>
           <button
-            className="bg-orange-500 text-white px-4 py-2 rounded"
+            className="bg-secondary-300 hover:bg-secondary-500 text-white px-4 py-2 rounded"
             onClick={() => {
               if (page === FormPages.length - 1) {
                 handleSubmit();
