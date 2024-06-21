@@ -13,12 +13,13 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PurposeChart = ({ startDate, endDate }) => {
-  const [sexCounts, setSexCounts] = useState({});
+  const [purposeCounts, setPurposeCounts] = useState({});
   const [totalRecords, setTotalRecords] = useState(0);
+  const [totalNight, setTotalNight] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchSexCounts = async (startDate, endDate) => {
+  const fetchPurposeCounts = async (startDate, endDate) => {
     try {
       const params = {};
       if (startDate && endDate) {
@@ -28,15 +29,16 @@ const PurposeChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getSexCounts', { params });
+      const response = await axios.get('http://localhost:3000/vhp/getGuestPurposeCounts', { params });
       if (response.data.success) {
-        setSexCounts(response.data.sexCounts);
-        setTotalRecords(response.data.totalRecords);
+        setPurposeCounts(response.data.guestPurposeCounts || {});
+        setTotalRecords(response.data.totalRecords || 0);
+        setTotalNight(response.data.totalNight || 0);
       } else {
         setError('Failed to fetch data');
       }
     } catch (error) {
-      console.error('Error fetching sex counts:', error);
+      console.error('Error fetching purpose counts:', error);
       setError('Error fetching data');
     }
     finally {
@@ -46,7 +48,7 @@ const PurposeChart = ({ startDate, endDate }) => {
 
   useEffect(() => {
     setLoading(true);
-    fetchSexCounts(startDate, endDate);
+    fetchPurposeCounts(startDate, endDate);
   }, [startDate, endDate]);
 
   if (error) {
@@ -54,11 +56,11 @@ const PurposeChart = ({ startDate, endDate }) => {
   }
 
   const data = {
-    labels: Object.keys(sexCounts),
+    labels: Object.keys(purposeCounts),
     datasets: [
       {
-        label: 'Sex Counts',
-        data: Object.values(sexCounts),
+        label: 'Purpose Counts',
+        data: Object.keys(purposeCounts).map(key => purposeCounts[key].count),
         backgroundColor: [
           'rgba(255, 99, 132, 0.6)',
           'rgba(54, 162, 235, 0.6)',
@@ -66,6 +68,20 @@ const PurposeChart = ({ startDate, endDate }) => {
           'rgba(75, 192, 192, 0.6)',
           'rgba(153, 102, 255, 0.6)',
           'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 71, 0.6)',
+          'rgba(75, 0, 130, 0.6)',
+          'rgba(60, 179, 113, 0.6)',
+          'rgba(255, 20, 147, 0.6)',
+          'rgba(0, 255, 127, 0.6)',
+          'rgba(0, 191, 255, 0.6)',
+          'rgba(139, 69, 19, 0.6)',
+          'rgba(255, 165, 0, 0.6)',
+          'rgba(75, 83, 32, 0.6)',
+          'rgba(64, 224, 208, 0.6)',
+          'rgba(210, 105, 30, 0.6)',
+          'rgba(220, 20, 60, 0.6)',
+          'rgba(255, 215, 0, 0.6)',
+          'rgba(255, 69, 0, 0.6)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -74,14 +90,45 @@ const PurposeChart = ({ startDate, endDate }) => {
           'rgba(75, 192, 192, 1)',
           'rgba(153, 102, 255, 1)',
           'rgba(255, 159, 64, 1)',
+          'rgba(255, 99, 71, 1)',
+          'rgba(75, 0, 130, 1)',
+          'rgba(60, 179, 113, 1)',
+          'rgba(255, 20, 147, 1)',
+          'rgba(0, 255, 127, 1)',
+          'rgba(0, 191, 255, 1)',
+          'rgba(139, 69, 19, 1)',
+          'rgba(255, 165, 0, 1)',
+          'rgba(75, 83, 32, 1)',
+          'rgba(64, 224, 208, 1)',
+          'rgba(210, 105, 30, 1)',
+          'rgba(220, 20, 60, 1)',
+          'rgba(255, 215, 0, 1)',
+          'rgba(255, 69, 0, 1)',
         ],
         borderWidth: 1,
       },
     ],
   };
 
+  const options = {
+    plugins: {
+      legend: {
+        display: true
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const purpose = context.label;
+            const purposeData = purposeCounts[purpose];
+            return `${purpose}: ${purposeData.count} records, ${purposeData.totalNight} nights`;
+          }
+        }
+      }
+    }
+  };
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col">
+    <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col border-2 border-black">
       {loading ? (
         <>
           <Skeleton height={30} width={150} />
@@ -90,12 +137,16 @@ const PurposeChart = ({ startDate, endDate }) => {
         </>
       ) : (
         <>
-          <div className="text-heading-6 mb-10">Total Records: {totalRecords}</div>
-            <div className='flex justify-center items-center mb-8 text-heading-5'>
-                Purpose
-            </div>
-          <Pie data={data} />
-        </>
+      <div className='flex gap-8 mb-10'>
+        <div className="text-heading-6">Total Records: {totalRecords}</div>
+        <div className="text-heading-6">Total Nights: {totalNight}</div>
+      </div>
+        
+      <div className='flex justify-center items-center mb-8 text-heading-5'>
+        Purpose
+      </div>
+      <Pie data={data} options={options}/>
+      </>
       )}
     </div>
   );
