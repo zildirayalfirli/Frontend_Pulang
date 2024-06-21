@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReservationForm from "../components/ReservationForm";
 import DataTable from "../components/DataTable";
+import RequestAndFeedbackTable from "../components/RequestAndFeedbackTable";
 
 const Input = () => {
   const [showForm, setShowForm] = useState(false);
@@ -29,6 +30,9 @@ const Input = () => {
       )}
       <div className="w-full p-8">
         <DataTable />
+      </div>
+      <div className="w-full p-8">
+        <RequestAndFeedbackTable />
       </div>
     </div>
   );

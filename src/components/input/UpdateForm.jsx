@@ -49,7 +49,7 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
     try {
       const response = await axios.get("http://localhost:3000/employee");
       const employeeOptions = response.data.data.map((employee) => ({
-        label: employee.employeeName,
+        label: `${employee.employeeName} (${employee.employeeDepartment})`,
         value: employee._id,
       }));
       setEmployees(employeeOptions);
