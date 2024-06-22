@@ -38,7 +38,7 @@ const AgeCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getAgeCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getAgeCounts', { params });
       if (response.data.success) {
         setAgeCounts(response.data.ageCounts);
         setTotalRecords(response.data.totalRecords);

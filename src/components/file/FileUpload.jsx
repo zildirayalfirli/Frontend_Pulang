@@ -16,7 +16,7 @@ function FileUpload() {
   const fetchFiles = async () => {
     try {
       setLoading(true);
-      const result = await axios.get("http://localhost:3000/vhp/files");
+      const result = await axios.get("http://192.168.1.141:3000/vhp/files");
       console.log("Fetched files:", result.data.data);
       setAllFiles(result.data.data);
     } catch (error) {
