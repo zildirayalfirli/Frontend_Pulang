@@ -3,8 +3,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import logoUpdate from "../assets/edit-2.svg";
 import logoDelete from "../assets/trash.svg";
-import UpdateForm from "../input/UpdateForm";
-import RequestAndFeedbackForm from "../input/RequestAndFeedbackForm";
+import UpdateForm from "./input/UpdateForm";
+import RequestAndFeedbackForm from "./input/RequestAndFeedbackForm";
 
 const DataTable = () => {
   const [rows, setRows] = useState([]);
