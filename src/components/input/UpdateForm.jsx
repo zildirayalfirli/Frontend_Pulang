@@ -34,7 +34,7 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/room");
+      const response = await axios.get("http://192.168.1.141:3000/room");
       const roomOptions = response.data.data.map((room) => ({
         label: room.roomNumber,
         value: room._id,
@@ -47,9 +47,9 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/employee");
+      const response = await axios.get("http://192.168.1.141:3000/employee");
       const employeeOptions = response.data.data.map((employee) => ({
-        label: employee.employeeName,
+        label: `${employee.employeeName} (${employee.employeeDepartment})`,
         value: employee._id,
       }));
       setEmployees(employeeOptions);
