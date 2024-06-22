@@ -23,7 +23,7 @@ const RoomCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getRoomCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getRoomCounts', { params });
       if (response.data.success) {
         const roomData = response.data.roomtypeCounts || {};
         const transformedData = Object.keys(roomData).map(room => ({

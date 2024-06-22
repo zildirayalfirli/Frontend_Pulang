@@ -29,7 +29,7 @@ const EscortChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getEscortingCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getEscortingCounts', { params });
       if (response.data.success) {
         setEscortingCounts(response.data.escortingCounts || {});
         setTotalRecords(response.data.totalRecords || 0);

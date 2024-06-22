@@ -20,7 +20,7 @@ const CountryCount = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getCountryCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getCountryCounts', { params });
       if (response.data.success) {
         setTotalRecords(response.data.totalRecords);
         setTotalNight(response.data.totalNight);

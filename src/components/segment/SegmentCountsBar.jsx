@@ -25,7 +25,7 @@ const SegmentCountsBar = ({ startDate, endDate }) => {
 
       console.log("Fetching data with params:", params);
 
-      const response = await axios.get('http://localhost:3000/vhp/getSegmentCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getSegmentCounts', { params });
       if (response.data.success) {
         console.log("Fetched data:", response.data.segmentCounts);
         const segmentData = response.data.segmentCounts || {};

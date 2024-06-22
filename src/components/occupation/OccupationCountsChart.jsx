@@ -23,7 +23,7 @@ const OccupationCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getOccupationCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getOccupationCounts', { params });
       if (response.data.success) {
         setOccupationCounts(response.data.data || []);
         const totalRecords = response.data.data.reduce((acc, item) => acc + item.count, 0);

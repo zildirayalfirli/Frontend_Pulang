@@ -29,7 +29,7 @@ const SegmentCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getSegmentCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getSegmentCounts', { params });
       if (response.data.success) {
         setSegmentCounts(response.data.segmentCounts);
         setTotalRecords(response.data.totalRecords);

@@ -53,7 +53,7 @@ const RepeaterGuestCount = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://localhost:3000/vhp/getSortedByRepeater', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getSortedByRepeater', { params });
       if (response.data.success) {
         setData(response.data.sortedData || []);
         setTotalRecords(response.data.totalRecords);
