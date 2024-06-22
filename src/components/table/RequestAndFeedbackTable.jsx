@@ -13,7 +13,7 @@ const RequestAndFeedbackTable = () => {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/request");
+      const response = await axios.get("http://192.168.1.141:3000/request");
       const dataArray = Array.isArray(response.data.data)
         ? response.data.data
         : [];
@@ -35,7 +35,7 @@ const RequestAndFeedbackTable = () => {
 
   const fetchFeedbacks = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/feedback");
+      const response = await axios.get("http://192.168.1.141:3000/feedback");
       const dataArray = Array.isArray(response.data.data)
         ? response.data.data
         : [];

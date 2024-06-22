@@ -7,7 +7,7 @@ function RoomInput({ formData, setFormData }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/room")
+      .get("http://192.168.1.141:3000/room")
       .then((response) => {
         const fetchedRooms = response.data.data;
         const formattedOptions = fetchedRooms.map((room) => ({

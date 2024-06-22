@@ -3,8 +3,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import logoUpdate from "../assets/edit-2.svg";
 import logoDelete from "../assets/trash.svg";
-import UpdateForm from "../components/input/UpdateForm";
-import RequestAndFeedbackForm from "../components/RequestAndFeedbackForm";
+import UpdateForm from "../input/UpdateForm";
+import RequestAndFeedbackForm from "../input/RequestAndFeedbackForm";
 
 const DataTable = () => {
   const [rows, setRows] = useState([]);
@@ -20,7 +20,7 @@ const DataTable = () => {
 
   const fetchData = () => {
     axios
-      .get("http://localhost:3000/event")
+      .get("http://192.168.1.141:3000/event")
       .then((response) => {
         const dataArray = Array.isArray(response.data.data)
           ? response.data.data
@@ -49,7 +49,7 @@ const DataTable = () => {
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this record?")) {
       axios
-        .delete(`http://localhost:3000/event/${id}`)
+        .delete(`http://192.168.1.141:3000/event/${id}`)
         .then(() => {
           fetchData();
         })
@@ -64,7 +64,7 @@ const DataTable = () => {
       window.confirm("Are you sure you want to delete the selected records?")
     ) {
       const deletePromises = rowSelectionModel.map((id) =>
-        axios.delete(`http://localhost:3000/event/${id}`)
+        axios.delete(`http://192.168.1.141:3000/event/${id}`)
       );
       Promise.all(deletePromises)
         .then(() => {
@@ -84,23 +84,26 @@ const DataTable = () => {
   const handleSave = async (updatedData) => {
     try {
       // Fetch guest ID
-      const guestResponse = await axios.post("http://localhost:3000/guest", {
-        guestName: updatedData.guestName,
-        waNumber: updatedData.waNumber,
-      });
+      const guestResponse = await axios.post(
+        "http://192.168.1.141:3000/guest",
+        {
+          guestName: updatedData.guestName,
+          waNumber: updatedData.waNumber,
+        }
+      );
 
       const guestId = guestResponse.data.data._id;
 
       // Fetch room ID
       const roomResponse = await axios.get(
-        `http://localhost:3000/room/bynumber?roomNumber=${updatedData.roomNumber}`
+        `http://192.168.1.141:3000/room/bynumber?roomNumber=${updatedData.roomNumber}`
       );
 
       const roomId = roomResponse.data.data._id;
 
       // Fetch employee ID
       const employeeResponse = await axios.get(
-        `http://localhost:3000/employee/byname?employeeName=${updatedData.employeeName}`
+        `http://192.168.1.141:3000/employee/byname?employeeName=${updatedData.employeeName}`
       );
 
       const employeeId = employeeResponse.data.data._id;
@@ -128,7 +131,7 @@ const DataTable = () => {
 
       // Patch data to the event API
       await axios.patch(
-        `http://localhost:3000/event/${updatedData.id}`,
+        `http://192.168.1.141:3000/event/${updatedData.id}`,
         dataToSend
       );
       alert("Reservation Data Updated Successfully");
@@ -145,7 +148,7 @@ const DataTable = () => {
     try {
       let response;
       if (formData.type === "Request") {
-        response = await axios.post("http://localhost:3000/request", {
+        response = await axios.post("http://192.168.1.141:3000/request", {
           eventId: selectedEventId,
           item: formData.item,
           quantity: formData.quantity,
@@ -155,7 +158,7 @@ const DataTable = () => {
           returnDate: formData.returnDate,
         });
       } else {
-        response = await axios.post("http://localhost:3000/feedback", {
+        response = await axios.post("http://192.168.1.141:3000/feedback", {
           eventId: selectedEventId,
           comment: formData.comment,
           category: formData.category,
@@ -163,7 +166,7 @@ const DataTable = () => {
       }
 
       const id = response.data.data._id;
-      await axios.patch(`http://localhost:3000/event/${selectedEventId}`, {
+      await axios.patch(`http://192.168.1.141:3000/event/${selectedEventId}`, {
         [formData.type.toLowerCase() + "Id"]: id,
       });
 

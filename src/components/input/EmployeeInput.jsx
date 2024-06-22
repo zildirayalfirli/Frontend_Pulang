@@ -7,7 +7,7 @@ function EmployeeInput({ formData, setFormData }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/employee")
+      .get("http://192.168.1.141:3000/employee")
       .then((response) => {
         const fetchedEmployees = response.data.data;
         const formattedOptions = fetchedEmployees.map((employee) => ({

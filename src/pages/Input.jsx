@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import ReservationForm from "../components/ReservationForm";
-import DataTable from "../components/DataTable";
-import RequestAndFeedbackTable from "../components/RequestAndFeedbackTable";
+import ReservationForm from "../components/input/ReservationForm";
+import DataTable from "../components/table/DataTable";
+import RequestAndFeedbackTable from "../components/table/RequestAndFeedbackTable";
 
 const Input = () => {
   const [showForm, setShowForm] = useState(false);

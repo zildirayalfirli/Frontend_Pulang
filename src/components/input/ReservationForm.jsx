@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import GuestInput from "./input/GuestInput";
-import RoomInput from "./input/RoomInput";
-import EtcInput from "./input/EtcInput";
-import EmployeeInput from "./input/EmployeeInput";
-import DateInput from "./input/DateInput";
+import GuestInput from "./GuestInput";
+import RoomInput from "./RoomInput";
+import EtcInput from "./EtcInput";
+import EmployeeInput from "./EmployeeInput";
+import DateInput from "./DateInput";
 import axios from "axios";
 
 function ReservationForm() {
@@ -100,21 +100,24 @@ function ReservationForm() {
 
   const handleSubmit = async () => {
     try {
-      const guestResponse = await axios.post("http://localhost:3000/guest", {
-        guestName: formData.guestName,
-        waNumber: formData.waNumber,
-      });
+      const guestResponse = await axios.post(
+        "http://192.168.1.141:3000/guest",
+        {
+          guestName: formData.guestName,
+          waNumber: formData.waNumber,
+        }
+      );
 
       const guestId = guestResponse.data.data._id;
 
       const roomResponse = await axios.get(
-        `http://localhost:3000/room/bynumber?roomNumber=${formData.roomNumber}`
+        `http://192.168.1.141:3000/room/bynumber?roomNumber=${formData.roomNumber}`
       );
 
       const roomId = roomResponse.data.data._id;
 
       const employeeResponse = await axios.get(
-        `http://localhost:3000/employee/byname?employeeName=${formData.employee}`
+        `http://192.168.1.141:3000/employee/byname?employeeName=${formData.employee}`
       );
 
       const employeeId = employeeResponse.data.data._id;
@@ -140,7 +143,7 @@ function ReservationForm() {
 
       // Post data to the event API
       const eventResponse = await axios.post(
-        "http://localhost:3000/event",
+        "http://192.168.1.141:3000/event",
         dataToSend
       );
       console.log("Event Response:", eventResponse.data); // Log respons untuk event
