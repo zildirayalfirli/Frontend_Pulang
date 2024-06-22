@@ -20,7 +20,7 @@ const CountryMap = ({ startDate, endDate }) => {
 
       console.log("Fetching data with params:", params);
 
-      const response = await axios.get('http://localhost:3000/vhp/getCountryCounts', { params });
+      const response = await axios.get('http://192.168.1.141:3000/vhp/getCountryCounts', { params });
       if (response.data.success) {
         console.log("Fetched data:", response.data.nationalityCounts);
         setNationalityCounts(response.data.nationalityCounts);
