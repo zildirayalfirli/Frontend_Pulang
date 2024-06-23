@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { get } from '../../services/ApiEndpoint';
+
 
 const RoomCountsChart = ({ startDate, endDate }) => {
   const [roomCounts, setRoomCounts] = useState([]);
@@ -23,7 +24,7 @@ const RoomCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getRoomCounts', { params });
+      const response = await get('/vhp/getRoomCounts', params );
       if (response.data.success) {
         const roomData = response.data.roomtypeCounts || {};
         const transformedData = Object.keys(roomData).map(room => ({

@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
-import axios from 'axios';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { get } from '../../services/ApiEndpoint';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+const COLORS = [
+  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6347', '#4B0082', 
+  '#3CB371', '#FF1493', '#00FF7F', '#00BFFF', '#8B4513', '#FFA500', '#4B5320', '#40E0D0', 
+  '#D2691E', '#DC143C', '#FFD700', '#FF4500'
+];
 
 const CategoryChart = ({ startDate, endDate }) => {
-  const [sexCounts, setSexCounts] = useState({});
+  const [categoryCounts, setCategoryCounts] = useState({});
   const [totalRecords, setTotalRecords] = useState(0);
+  const [totalNight, setTotalNight] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchSexCounts = async (startDate, endDate) => {
+  const fetchCategoryCounts = async (startDate, endDate) => {
     try {
       const params = {};
       if (startDate && endDate) {
@@ -28,57 +27,37 @@ const CategoryChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getSexCounts', { params });
+      const response = await get('/vhp/getVisitorCategoryCounts', params);
+      console.log(response.data);
       if (response.data.success) {
-        setSexCounts(response.data.sexCounts);
-        setTotalRecords(response.data.totalRecords);
+        setCategoryCounts(response.data.guestCategoryCounts || {});
+        setTotalRecords(response.data.totalRecords || 0);
+        setTotalNight(response.data.totalNight || 0);
       } else {
         setError('Failed to fetch data');
       }
     } catch (error) {
-      console.error('Error fetching sex counts:', error);
+      console.error('Error fetching category counts:', error);
       setError('Error fetching data');
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
     setLoading(true);
-    fetchSexCounts(startDate, endDate);
+    fetchCategoryCounts(startDate, endDate);
   }, [startDate, endDate]);
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
   }
 
-  const data = {
-    labels: Object.keys(sexCounts),
-    datasets: [
-      {
-        label: 'Sex Counts',
-        data: Object.values(sexCounts),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-          'rgba(255, 159, 64, 0.6)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  const data = Object.keys(categoryCounts).map((key, index) => ({
+    name: key,
+    value: categoryCounts[key].count,
+    color: COLORS[index % COLORS.length],
+  }));
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col border-2 border-black">
@@ -90,11 +69,33 @@ const CategoryChart = ({ startDate, endDate }) => {
         </>
       ) : (
         <>
-          <div className="text-heading-6 mb-10">Total Records: {totalRecords}</div>
-          <div className='flex justify-center items-center mb-8 text-heading-3'>
+          <div className='flex gap-8 mb-8'>
+            <div className="text-heading-6">Total Records: {totalRecords}</div>
+            <div className="text-heading-6">Total Nights: {totalNight}</div>
+          </div>
+          <div className='flex justify-center items-center mb-4 text-heading-3'>
             Category
           </div>
-          <Pie data={data} />
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={150}
+                fill="#8884d8"
+                label
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </>
       )}
     </div>

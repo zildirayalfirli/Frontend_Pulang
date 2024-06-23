@@ -17,8 +17,8 @@ import CategoryChart from '../components/category/CategoryChart';
 import PurposeChart from '../components/purpose/PurposeChart';
 import EscortChart from '../components/escort/EscortChart';
 import ItemChart from '../components/item/ItemChart';
-import PriorityTable from '../components/priorities/PriorityTable';
 import CommentChart from '../components/comment/CommentChart';
+import PriorityTable from '../components/priority/PriorityTable';
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(null);

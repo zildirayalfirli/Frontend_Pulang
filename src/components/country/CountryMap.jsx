@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
 import { nationalityCoordinates } from './DataCountry';
 
 const CountryMap = ({ startDate, endDate }) => {
@@ -20,7 +20,7 @@ const CountryMap = ({ startDate, endDate }) => {
 
       console.log("Fetching data with params:", params);
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getCountryCounts', { params });
+      const response = await get('/vhp/getCountryCounts', params );
       if (response.data.success) {
         console.log("Fetched data:", response.data.nationalityCounts);
         setNationalityCounts(response.data.nationalityCounts);

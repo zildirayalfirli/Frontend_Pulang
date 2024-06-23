@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import axios from "axios";
+import { get } from '../../services/ApiEndpoint';
 import { styled } from "@mui/material/styles";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -59,7 +59,7 @@ export default function PriorityTable({ startDate, endDate }) {
           params.startdate = startDate.toISOString().split('T')[0];
           params.enddate = adjustedEndDate.toISOString().split('T')[0];
         }
-        const response = await axios.get("http://192.168.1.141:3000/vhp/getGuestPriority", { params });
+        const response = await get("/vhp/getGuestPriority", params );
         const dataArray = Array.isArray(response.data.data)
           ? response.data.data
           : [];

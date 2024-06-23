@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+const COLORS = [
+  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+];
 
 const SexCountsChart = ({ startDate, endDate }) => {
   const [sexCounts, setSexCounts] = useState({});
@@ -28,7 +24,7 @@ const SexCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getSexCounts', { params });
+      const response = await get('/vhp/getSexCounts', params );
       if (response.data.success) {
         setSexCounts(response.data.sexCounts);
         setTotalRecords(response.data.totalRecords);
@@ -53,32 +49,11 @@ const SexCountsChart = ({ startDate, endDate }) => {
     return <div className="text-red-500">{error}</div>;
   }
 
-  const data = {
-    labels: Object.keys(sexCounts),
-    datasets: [
-      {
-        label: 'Sex Counts',
-        data: Object.values(sexCounts),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-          'rgba(255, 159, 64, 0.6)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  const data = Object.keys(sexCounts).map((key, index) => ({
+    name: key,
+    value: sexCounts[key],
+    color: COLORS[index % COLORS.length],
+  }));
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col border-2 border-black">
@@ -90,11 +65,30 @@ const SexCountsChart = ({ startDate, endDate }) => {
         </>
       ) : (
         <>
-          <div className="text-heading-6 mb-10">Total Records: {totalRecords}</div>
-            <div className='flex justify-center items-center mb-8 text-heading-3'>
+          <div className="text-heading-6 mb-8">Total Records: {totalRecords}</div>
+          <div className='flex justify-center items-center mb-4 text-heading-3'>
             Gender
           </div>
-          <Pie data={data} />
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={150}
+                fill="#8884d8"
+                label
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </>
       )}
     </div>

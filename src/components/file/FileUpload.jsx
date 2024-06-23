@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { FaArrowUp } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { get, uploadFile, deleteUser } from '../../services/ApiEndpoint';
 
 function FileUpload() {
   const [file, setFile] = useState(null);
@@ -11,12 +11,12 @@ function FileUpload() {
   const [allFiles, setAllFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [deleting, setDeleting] = useState(null); // To track the deleting file ID
+  const [deleting, setDeleting] = useState(null);
 
   const fetchFiles = async () => {
     try {
       setLoading(true);
-      const result = await axios.get("http://192.168.1.141:3000/vhp/files");
+      const result = await get('/vhp/files');
       console.log("Fetched files:", result.data.data);
       setAllFiles(result.data.data);
     } catch (error) {
@@ -38,13 +38,7 @@ function FileUpload() {
 
     try {
       setUploading(true);
-      const result = await axios.post(
-        "http://localhost:3000/vhp/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const result = await uploadFile('/vhp/upload', formData);
       console.log(result);
       if (result.data.success) {
         alert("Uploaded Successfully!!!");
@@ -62,7 +56,7 @@ function FileUpload() {
   const handleDelete = async (id) => {
     try {
       setDeleting(id);
-      const result = await axios.delete(`http://localhost:3000/vhp/delete/${id}`);
+      const result = await deleteUser(`/vhp/delete/${id}`);
       console.log(result);
       if (result.data.success) {
         alert("Deleted Successfully!!!");

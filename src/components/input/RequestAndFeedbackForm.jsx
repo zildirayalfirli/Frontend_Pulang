@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
-import axios from "axios";
+import { get } from '../../services/ApiEndpoint';
 
 const RequestAndFeedbackForm = ({ onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ const RequestAndFeedbackForm = ({ onSave, onCancel }) => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://192.168.1.141:3000/employee");
+      const response = await get("/employee");
       const employeeOptions = response.data.data.map((employee) => ({
         label: employee.employeeName,
         value: employee._id,
