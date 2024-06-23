@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
 import CountryMap from './CountryMap';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -20,7 +20,7 @@ const CountryCount = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getCountryCounts', { params });
+      const response = await get('/vhp/getCountryCounts', params );
       if (response.data.success) {
         setTotalRecords(response.data.totalRecords);
         setTotalNight(response.data.totalNight);

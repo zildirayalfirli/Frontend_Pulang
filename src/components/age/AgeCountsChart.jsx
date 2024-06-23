@@ -1,26 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-import axios from 'axios';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { get } from '../../services/ApiEndpoint';
 
 const AgeCountsChart = ({ startDate, endDate }) => {
   const [ageCounts, setAgeCounts] = useState({});
@@ -38,7 +20,7 @@ const AgeCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getAgeCounts', { params });
+      const response = await get('/vhp/getAgeCounts', params);
       if (response.data.success) {
         setAgeCounts(response.data.ageCounts);
         setTotalRecords(response.data.totalRecords);
@@ -62,35 +44,10 @@ const AgeCountsChart = ({ startDate, endDate }) => {
     return <div className="text-red-500">{error}</div>;
   }
 
-  const data = {
-    labels: Object.keys(ageCounts),
-    datasets: [
-      {
-        label: 'Age Counts',
-        data: Object.values(ageCounts),
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const options = {
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const age = context.label;
-            const count = ageCounts[age];
-            return `${age}: ${count} records`;
-          }
-        }
-      }
-    }
-  };
+  const data = Object.keys(ageCounts).map(age => ({
+    age,
+    count: ageCounts[age],
+  }));
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col border-2 border-black">
@@ -106,7 +63,24 @@ const AgeCountsChart = ({ startDate, endDate }) => {
           <div className='flex justify-center items-center mb-8 text-heading-3'>
             Age
           </div>
-          <Bar data={data} options={options} />
+          <ResponsiveContainer width="100%" height={500}>
+            <BarChart
+              data={data}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="age">
+                <Label value="Umur" offset={-5} position="insideBottom" />
+              </XAxis>
+              <YAxis>
+                <Label angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }}>
+                  Jumlah
+                </Label>
+              </YAxis>
+              <Tooltip />
+              <Bar dataKey="count" fill="#FF6384" />
+            </BarChart>
+          </ResponsiveContainer>
         </>
       )}
     </div>

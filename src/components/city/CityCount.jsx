@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import CityMap from './CityMap';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { get } from '../../services/ApiEndpoint';
 
 const CityCount = ({ startDate, endDate }) => {
   const [totalRecords, setTotalRecords] = useState(0);
@@ -20,7 +20,7 @@ const CityCount = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getCityCounts', { params });
+      const response = await get('/vhp/getCityCounts', params );
       if (response.data.success) {
         setTotalRecords(response.data.totalRecords);
         setTotalNight(response.data.totalNight);

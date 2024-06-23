@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
-import axios from "axios";
+import { get } from '../../services/ApiEndpoint';
 
 function RoomInput({ formData, setFormData }) {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://192.168.1.141:3000/room")
+    get("/room")
       .then((response) => {
         const fetchedRooms = response.data.data;
         const formattedOptions = fetchedRooms.map((room) => ({

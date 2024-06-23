@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+const COLORS = [
+  '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6347', '#4B0082', 
+  '#3CB371', '#FF1493', '#00FF7F', '#00BFFF', '#8B4513', '#FFA500', '#4B5320', '#40E0D0', 
+  '#D2691E', '#DC143C', '#FFD700', '#FF4500'
+];
 
 const PurposeChart = ({ startDate, endDate }) => {
   const [purposeCounts, setPurposeCounts] = useState({});
@@ -29,7 +27,7 @@ const PurposeChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getGuestPurposeCounts', { params });
+      const response = await get('/vhp/getGuestPurposeCounts', params );
       if (response.data.success) {
         setPurposeCounts(response.data.guestPurposeCounts || {});
         setTotalRecords(response.data.totalRecords || 0);
@@ -40,8 +38,7 @@ const PurposeChart = ({ startDate, endDate }) => {
     } catch (error) {
       console.error('Error fetching purpose counts:', error);
       setError('Error fetching data');
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -55,77 +52,11 @@ const PurposeChart = ({ startDate, endDate }) => {
     return <div className="text-red-500">{error}</div>;
   }
 
-  const data = {
-    labels: Object.keys(purposeCounts),
-    datasets: [
-      {
-        label: 'Purpose Counts',
-        data: Object.keys(purposeCounts).map(key => purposeCounts[key].count),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-          'rgba(255, 159, 64, 0.6)',
-          'rgba(255, 99, 71, 0.6)',
-          'rgba(75, 0, 130, 0.6)',
-          'rgba(60, 179, 113, 0.6)',
-          'rgba(255, 20, 147, 0.6)',
-          'rgba(0, 255, 127, 0.6)',
-          'rgba(0, 191, 255, 0.6)',
-          'rgba(139, 69, 19, 0.6)',
-          'rgba(255, 165, 0, 0.6)',
-          'rgba(75, 83, 32, 0.6)',
-          'rgba(64, 224, 208, 0.6)',
-          'rgba(210, 105, 30, 0.6)',
-          'rgba(220, 20, 60, 0.6)',
-          'rgba(255, 215, 0, 0.6)',
-          'rgba(255, 69, 0, 0.6)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 99, 71, 1)',
-          'rgba(75, 0, 130, 1)',
-          'rgba(60, 179, 113, 1)',
-          'rgba(255, 20, 147, 1)',
-          'rgba(0, 255, 127, 1)',
-          'rgba(0, 191, 255, 1)',
-          'rgba(139, 69, 19, 1)',
-          'rgba(255, 165, 0, 1)',
-          'rgba(75, 83, 32, 1)',
-          'rgba(64, 224, 208, 1)',
-          'rgba(210, 105, 30, 1)',
-          'rgba(220, 20, 60, 1)',
-          'rgba(255, 215, 0, 1)',
-          'rgba(255, 69, 0, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const options = {
-    plugins: {
-      legend: {
-        display: true
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const purpose = context.label;
-            const purposeData = purposeCounts[purpose];
-            return `${purpose}: ${purposeData.count} records, ${purposeData.totalNight} nights`;
-          }
-        }
-      }
-    }
-  };
+  const data = Object.keys(purposeCounts).map((key, index) => ({
+    name: key,
+    value: purposeCounts[key].count,
+    color: COLORS[index % COLORS.length],
+  }));
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full flex flex-col border-2 border-black">
@@ -137,16 +68,37 @@ const PurposeChart = ({ startDate, endDate }) => {
         </>
       ) : (
         <>
-      <div className='flex gap-8 mb-10'>
-        <div className="text-heading-6">Total Records: {totalRecords}</div>
-        <div className="text-heading-6">Total Nights: {totalNight}</div>
-      </div>
-        
-      <div className='flex justify-center items-center mb-8 text-heading-3'>
-        Purpose
-      </div>
-      <Pie data={data} options={options}/>
-      </>
+          <div className='flex gap-8 mb-8'>
+            <div className="text-heading-6">Total Records: {totalRecords}</div>
+            <div className="text-heading-6">Total Nights: {totalNight}</div>
+          </div>
+          <div className='flex justify-center items-center mb-4 text-heading-3'>
+            Purpose
+          </div>
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={150}
+                fill="#8884d8"
+                label
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value, name) => {
+                const purposeData = purposeCounts[name];
+                return `${value} records, ${purposeData.totalNight} nights`;
+              }} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </>
       )}
     </div>
   );

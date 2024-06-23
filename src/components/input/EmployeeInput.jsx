@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
-import axios from "axios";
+import { get } from '../../services/ApiEndpoint';
 
 function EmployeeInput({ formData, setFormData }) {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://192.168.1.141:3000/employee")
+      get("/employee")
       .then((response) => {
         const fetchedEmployees = response.data.data;
         const formattedOptions = fetchedEmployees.map((employee) => ({

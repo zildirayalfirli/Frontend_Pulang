@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
 import { Treemap, Tooltip, ResponsiveContainer } from 'recharts';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -53,7 +53,7 @@ const CompanyRecord = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getSortedCompanyByRepeater', { params });
+      const response = await get('/vhp/getSortedCompanyByRepeater', params );
       if (response.data.success) {
         setData(response.data.data || []);
         setTotalRepeater(response.data.totalRepeater);

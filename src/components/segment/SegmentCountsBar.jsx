@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
@@ -25,7 +25,7 @@ const SegmentCountsBar = ({ startDate, endDate }) => {
 
       console.log("Fetching data with params:", params);
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getSegmentCounts', { params });
+      const response = await get('/vhp/getSegmentCounts', params );
       if (response.data.success) {
         console.log("Fetched data:", response.data.segmentCounts);
         const segmentData = response.data.segmentCounts || {};

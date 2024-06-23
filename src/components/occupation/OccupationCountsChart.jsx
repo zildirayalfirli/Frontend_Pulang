@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
@@ -23,7 +23,7 @@ const OccupationCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getOccupationCounts', { params });
+      const response = await get('/vhp/getOccupationCounts', params );
       if (response.data.success) {
         setOccupationCounts(response.data.data || []);
         const totalRecords = response.data.data.reduce((acc, item) => acc + item.count, 0);

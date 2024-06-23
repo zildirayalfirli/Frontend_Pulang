@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
-import axios from 'axios';
+import { get } from '../../services/ApiEndpoint';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import {
@@ -29,7 +29,7 @@ const SegmentCountsChart = ({ startDate, endDate }) => {
         params.enddate = adjustedEndDate.toISOString().split('T')[0];
       }
 
-      const response = await axios.get('http://192.168.1.141:3000/vhp/getSegmentCounts', { params });
+      const response = await get('/vhp/getSegmentCounts', params );
       if (response.data.success) {
         setSegmentCounts(response.data.segmentCounts);
         setTotalRecords(response.data.totalRecords);

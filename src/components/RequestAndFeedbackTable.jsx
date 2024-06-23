@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import axios from "axios";
+import { get } from '../services/ApiEndpoint';
 
 const RequestAndFeedbackTable = () => {
   const [requests, setRequests] = useState([]);
@@ -13,7 +13,7 @@ const RequestAndFeedbackTable = () => {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get("http://192.168.1.141:3000/request");
+      const response = await get("/request");
       const dataArray = Array.isArray(response.data.data)
         ? response.data.data
         : [];
@@ -35,7 +35,7 @@ const RequestAndFeedbackTable = () => {
 
   const fetchFeedbacks = async () => {
     try {
-      const response = await axios.get("http://192.168.1.141:3000/feedback");
+      const response = await get("/feedback");
       const dataArray = Array.isArray(response.data.data)
         ? response.data.data
         : [];
