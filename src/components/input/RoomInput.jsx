@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
-import { get } from '../../services/ApiEndpoint';
+import { get } from "../../services/ApiEndpoint";
 
 function RoomInput({ formData, setFormData }) {
   const [options, setOptions] = useState([]);
@@ -10,7 +10,7 @@ function RoomInput({ formData, setFormData }) {
       .then((response) => {
         const fetchedRooms = response.data.data;
         const formattedOptions = fetchedRooms.map((room) => ({
-          label: `Room ${room.roomNumber} (${room.roomType})`,
+          label: `Room ${room.roomNumber}`,
           value: room._id,
         }));
         setOptions(formattedOptions);

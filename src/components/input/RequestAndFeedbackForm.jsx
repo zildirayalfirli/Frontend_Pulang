@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
-import { get } from '../../services/ApiEndpoint';
+import { get } from "../../services/ApiEndpoint";
 
 const RequestAndFeedbackForm = ({ onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -10,7 +10,6 @@ const RequestAndFeedbackForm = ({ onSave, onCancel }) => {
     employeeId: "",
     requestTime: "",
     executionTime: "",
-    returnDate: "",
     comment: "",
     category: "",
   });
@@ -21,6 +20,21 @@ const RequestAndFeedbackForm = ({ onSave, onCancel }) => {
     { label: "Request", value: "Request" },
     { label: "Feedback", value: "Feedback" },
   ];
+
+  const feedbackCategories = [
+    { label: "Engineering", value: "Engineering" },
+    { label: "Front Office", value: "Front Office" },
+    { label: "FnB", value: "FnB" },
+    { label: "House Keeping", value: "House Keeping" },
+    { label: "IT", value: "IT" },
+    { label: "Building", value: "Building" },
+    { label: "Others", value: "Others" },
+  ];
+
+  function handleFeedbackSelect(selectedFeedbacks) {
+    const selectedFeedback = selectedFeedbacks[0].value;
+    setFormData({ ...formData, category: selectedFeedback });
+  }
 
   useEffect(() => {
     if (formType === "Request") {
@@ -122,17 +136,6 @@ const RequestAndFeedbackForm = ({ onSave, onCancel }) => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Return Date:</label>
-              <input
-                type="date"
-                name="returnDate"
-                value={formData.returnDate}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-secondary-300 rounded mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
-            <div className="mb-4">
               <label className="block text-gray-700">Employee:</label>
               <Select
                 options={employees}
@@ -162,14 +165,14 @@ const RequestAndFeedbackForm = ({ onSave, onCancel }) => {
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Category:</label>
-              <input
-                type="text"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-secondary-300 rounded mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <Select
+                name="purpose"
+                options={feedbackCategories}
+                onChange={handleFeedbackSelect}
+                searchable="true"
+                color="orange"
+                className="mb-4 "
+              ></Select>
             </div>
           </>
         )}

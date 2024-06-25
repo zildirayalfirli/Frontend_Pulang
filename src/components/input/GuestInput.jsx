@@ -10,7 +10,10 @@ function GuestInput({ formData, setFormData }) {
           className="mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={formData.guestName}
           onChange={(event) =>
-            setFormData({ ...formData, guestName: event.target.value })
+            setFormData({
+              ...formData,
+              guestName: event.target.value.toUpperCase(),
+            })
           }
         />
       </div>
@@ -21,7 +24,10 @@ function GuestInput({ formData, setFormData }) {
           className="mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={formData.waNumber}
           onChange={(event) =>
-            setFormData({ ...formData, waNumber: event.target.value })
+            setFormData({
+              ...formData,
+              waNumber: event.target.value.toUpperCase(),
+            })
           }
         />
       </div>

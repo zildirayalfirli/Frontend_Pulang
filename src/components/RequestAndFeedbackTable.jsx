@@ -1,53 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { get } from '../services/ApiEndpoint';
+import { get, post } from "../services/ApiEndpoint";
 
 const RequestAndFeedbackTable = () => {
   const [requests, setRequests] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
 
   useEffect(() => {
-    fetchRequests();
-    fetchFeedbacks();
+    fetchData("/request", transformRequestData, setRequests);
+    fetchData("/feedback", transformFeedbackData, setFeedbacks);
   }, []);
 
-  const fetchRequests = async () => {
+  const fetchData = async (endpoint, transformData, setData) => {
     try {
-      const response = await get("/request");
+      const response = await get(endpoint);
       const dataArray = Array.isArray(response.data.data)
         ? response.data.data
         : [];
-      const transformedData = dataArray.map((data) => ({
-        id: data._id,
-        eventId: data.eventId[0],
-        item: data.item,
-        quantity: data.quantity,
-        employeeName: data.employeeId?.employeeName || "",
-        requestTime: new Date(data.requestTime).toLocaleString(),
-        executionTime: new Date(data.executionTime).toLocaleString(),
-        returnDate: new Date(data.returnDate).toLocaleDateString(),
-      }));
-      setRequests(transformedData);
+      const transformedData = dataArray
+        .map(transformData)
+        .sort((a, b) => b.id.localeCompare(a.id));
+      setData(transformedData);
     } catch (error) {
-      console.error("Error fetching requests:", error);
+      console.error(`Error fetching data from ${endpoint}:`, error);
     }
   };
 
-  const fetchFeedbacks = async () => {
+  const transformRequestData = (data) => ({
+    id: data._id,
+    eventId: data.eventId[0],
+    item: data.item,
+    quantity: data.quantity,
+    employeeName: data.employeeId?.employeeName || "",
+    requestTime: new Date(data.requestTime).toLocaleString(),
+    executionTime: new Date(data.executionTime).toLocaleString(),
+    returnDate: data.returnDate
+      ? new Date(data.returnDate).toLocaleDateString()
+      : "Not Returned",
+  });
+
+  const transformFeedbackData = (data) => ({
+    id: data._id,
+    eventId: data.eventId[0],
+    comment: data.comment,
+    category: data.category,
+  });
+
+  const handleReturnDateClick = async (id) => {
+    const currentDate = new Date().toISOString().split("T")[0];
     try {
-      const response = await get("/feedback");
-      const dataArray = Array.isArray(response.data.data)
-        ? response.data.data
-        : [];
-      const transformedData = dataArray.map((data) => ({
-        id: data._id,
-        eventId: data.eventId[0],
-        comment: data.comment,
-        category: data.category,
-      }));
-      setFeedbacks(transformedData);
+      await post(`/request/updateReturnDate`, { id, returnDate: currentDate });
+      fetchData("/request", transformRequestData, setRequests);
     } catch (error) {
-      console.error("Error fetching feedbacks:", error);
+      console.error(`Error updating return date for request ${id}:`, error);
     }
   };
 
@@ -60,6 +65,19 @@ const RequestAndFeedbackTable = () => {
     { field: "requestTime", headerName: "Request Time", width: 200 },
     { field: "executionTime", headerName: "Execution Time", width: 200 },
     { field: "returnDate", headerName: "Return Date", width: 150 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      renderCell: (params) => (
+        <button
+          onClick={() => handleReturnDateClick(params.row.id)}
+          className="bg-secondary-300 hover:bg-secondary-500 text-white font-bold px-2 rounded"
+        >
+          Set Return Date
+        </button>
+      ),
+    },
   ];
 
   const feedbackColumns = [
