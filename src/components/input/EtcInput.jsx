@@ -6,7 +6,8 @@ const EtcInput = ({ formData, setFormData }) => {
   const [priorityData, setPriorityData] = useState({
     elder: "",
     child: "",
-    other: "",
+    disabled: "",
+    pregnant: "",
   });
   const purposeOptions = [
     { label: "Honeymoon", value: "Honeymoon" },
@@ -15,9 +16,11 @@ const EtcInput = ({ formData, setFormData }) => {
     { label: "Business", value: "Business" },
   ];
   const escortOptions = [
-    { label: "option1", value: "option1" },
-    { label: "option2", value: "option2" },
-    { label: "option3", value: "option3" },
+    { label: "Escorted to Elevator", value: "Escorted to Elevator" },
+    { label: "Escorted to Room", value: "Escorted to Room" },
+    { label: "Refused", value: "Refused" },
+    { label: "Repeater", value: "Repeater" },
+    { label: "No Escort", value: "No Escort" },
   ];
 
   function handlePurposeSelect(selectedPurposes) {
@@ -32,7 +35,7 @@ const EtcInput = ({ formData, setFormData }) => {
     const { name, value } = event.target;
     const updatedPriorityData = { ...priorityData, [name]: value };
     setPriorityData(updatedPriorityData);
-    const mergedPriorityData = `Elder: ${updatedPriorityData.elder}, Child: ${updatedPriorityData.child}, Other: ${updatedPriorityData.other}`;
+    const mergedPriorityData = `Elder: ${updatedPriorityData.elder}, Child: ${updatedPriorityData.child}, Disabled: ${updatedPriorityData.disabled}, Pregnant: ${updatedPriorityData.pregnant}`;
     setFormData({ ...formData, guestPriority: mergedPriorityData });
   };
 
@@ -86,11 +89,19 @@ const EtcInput = ({ formData, setFormData }) => {
             onChange={handlePriorityChange}
             className="flex mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
-          <label className="block text-gray-700 mx-[8px]">Other:</label>
+          <label className="block text-gray-700 mx-[8px]">Disabled:</label>
           <input
             type="number"
-            name="other"
-            value={priorityData.other}
+            name="disabled"
+            value={priorityData.disabled}
+            onChange={handlePriorityChange}
+            className="flex mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+          <label className="block text-gray-700 mx-[8px]">Pregnant:</label>
+          <input
+            type="number"
+            name="pregnant"
+            value={priorityData.pregnant}
             onChange={handlePriorityChange}
             className="flex mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
@@ -101,7 +112,10 @@ const EtcInput = ({ formData, setFormData }) => {
           className="mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={formData.plateNumber}
           onChange={(event) =>
-            setFormData({ ...formData, plateNumber: event.target.value })
+            setFormData({
+              ...formData,
+              plateNumber: event.target.value.toUpperCase(),
+            })
           }
         />
       </div>

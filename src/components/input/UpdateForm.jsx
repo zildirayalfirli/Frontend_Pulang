@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
-import { get } from '../../services/ApiEndpoint';
+import { get } from "../../services/ApiEndpoint";
 
 const UpdateForm = ({ data, onSave, onCancel }) => {
   const [formData, setFormData] = useState(data);
@@ -9,7 +9,8 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
   const [priorityData, setPriorityData] = useState({
     elder: "",
     child: "",
-    other: "",
+    disabled: "",
+    pregnant: "",
   });
 
   const purposeOptions = [
@@ -96,7 +97,7 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
           <input
             type="text"
             name="guestName"
-            value={formData?.guestName || ""}
+            value={formData?.guestName.toUpperCase() || ""}
             onChange={handleChange}
             className="w-full p-2 border border-secondary-300 rounded mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
@@ -186,11 +187,19 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
               onChange={handlePriorityChange}
               className="flex mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
-            <label className="block text-gray-700 mx-2">Other:</label>
+            <label className="block text-gray-700 mx-[8px]">Disabled:</label>
             <input
               type="number"
-              name="other"
-              value={priorityData.other}
+              name="disabled"
+              value={priorityData.disabled}
+              onChange={handlePriorityChange}
+              className="flex mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+            <label className="block text-gray-700 mx-[8px]">Pregnant:</label>
+            <input
+              type="number"
+              name="pregnant"
+              value={priorityData.pregnant}
               onChange={handlePriorityChange}
               className="flex mt-1 block w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -211,7 +220,7 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
           <input
             type="text"
             name="plateNumber"
-            value={formData?.plateNumber || ""}
+            value={formData?.plateNumber.toUpperCase() || ""}
             onChange={handleChange}
             className="w-full p-2 border border-secondary-300 rounded mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />

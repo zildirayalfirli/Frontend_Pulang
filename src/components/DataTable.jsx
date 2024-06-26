@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { get, post, deleteUser } from '../services/ApiEndpoint';
-import axios from 'axios'
+import { get, post, deleteUser } from "../services/ApiEndpoint";
+import axios from "axios";
 import logoUpdate from "../assets/edit-2.svg";
 import logoDelete from "../assets/trash.svg";
 import UpdateForm from "./input/UpdateForm";
@@ -20,25 +20,29 @@ const DataTable = () => {
   }, []);
 
   const fetchData = () => {
-      get("/event")
+    get("/event")
       .then((response) => {
         const dataArray = Array.isArray(response.data.data)
           ? response.data.data
           : [];
-        const transformedData = dataArray.map((data) => ({
-          id: data._id,
-          guestName: data.guestId[0]?.guestName || "",
-          waNumber: data.guestId[0]?.waNumber || "",
-          roomNumber: data.roomId[0]?.roomNumber || "",
-          checkInDate: new Date(data.checkInDate).toISOString().split("T")[0],
-          checkOutDate: new Date(data.checkOutDate).toISOString().split("T")[0],
-          guestPurpose: data.guestPurpose,
-          escorting: data.escorting,
-          guestPriority: data.guestPriority,
-          voucherNumber: data.voucherNumber,
-          plateNumber: data.plateNumber,
-          employeeName: data.employeeId[0]?.employeeName || "",
-        }));
+        const transformedData = dataArray
+          .map((data) => ({
+            id: data._id,
+            guestName: data.guestId[0]?.guestName || "",
+            waNumber: data.guestId[0]?.waNumber || "",
+            roomNumber: data.roomId[0]?.roomNumber || "",
+            checkInDate: new Date(data.checkInDate).toISOString().split("T")[0],
+            checkOutDate: new Date(data.checkOutDate)
+              .toISOString()
+              .split("T")[0],
+            guestPurpose: data.guestPurpose,
+            escorting: data.escorting,
+            guestPriority: data.guestPriority,
+            voucherNumber: data.voucherNumber,
+            plateNumber: data.plateNumber,
+            employeeName: data.employeeId[0]?.employeeName || "",
+          }))
+          .sort((a, b) => b.id.localeCompare(a.id));
         setRows(transformedData);
       })
       .catch((error) => {
@@ -48,7 +52,7 @@ const DataTable = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this record?")) {
-        deleteUser(`/event/${id}`)
+      deleteUser(`/event/${id}`)
         .then(() => {
           fetchData();
         })
@@ -56,6 +60,7 @@ const DataTable = () => {
           console.error("Error deleting data:", error);
         });
     }
+    window.location.reload();
   };
 
   const handleBulkDelete = () => {
@@ -74,6 +79,7 @@ const DataTable = () => {
           console.error("Error deleting data:", error);
         });
     }
+    window.location.reload();
   };
 
   const handleUpdate = (row) => {
@@ -83,13 +89,10 @@ const DataTable = () => {
   const handleSave = async (updatedData) => {
     try {
       // Fetch guest ID
-      const guestResponse = await post(
-        "/guest",
-        {
-          guestName: updatedData.guestName,
-          waNumber: updatedData.waNumber,
-        }
-      );
+      const guestResponse = await post("/guest", {
+        guestName: updatedData.guestName,
+        waNumber: updatedData.waNumber,
+      });
 
       const guestId = guestResponse.data.data._id;
 
@@ -130,7 +133,7 @@ const DataTable = () => {
 
       // Patch data to the event API
       await axios.patch(
-        `http://192.168.1.141:3000/event/${updatedData.id}`,
+        `http://localhost:3000/event/${updatedData.id}`,
         dataToSend
       );
       alert("Reservation Data Updated Successfully");
@@ -165,7 +168,7 @@ const DataTable = () => {
       }
 
       const id = response.data.data._id;
-      await axios.patch(`http://192.168.1.141:3000/event/${selectedEventId}`, {
+      await axios.patch(`http://localhost:3000/event/${selectedEventId}`, {
         [formData.type.toLowerCase() + "Id"]: id,
       });
 
@@ -209,7 +212,7 @@ const DataTable = () => {
               setSelectedEventId(params.row.id);
               setShowForm(true);
             }}
-            className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded"
+            className="bg-secondary-300 hover:bg-secondary-500 text-white px-2 rounded"
           >
             Req & Feed
           </button>
@@ -261,7 +264,7 @@ const DataTable = () => {
               paginationModel: { page: 0, pageSize: 5 },
             },
           }}
-          pageSizeOptions={[5, 10]}
+          pageSizeOptions={[10, 25, 50, 100]}
         />
       </div>
     </div>
