@@ -12,74 +12,69 @@ const DataTable = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [editData, setEditData] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState(null);
   const [selectedEventId, setSelectedEventId] = useState(null);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = () => {
-    get("/event")
-      .then((response) => {
-        const dataArray = Array.isArray(response.data.data)
-          ? response.data.data
-          : [];
-        const transformedData = dataArray
-          .map((data) => ({
-            id: data._id,
-            guestName: data.guestId[0]?.guestName || "",
-            waNumber: data.guestId[0]?.waNumber || "",
-            roomNumber: data.roomId[0]?.roomNumber || "",
-            checkInDate: new Date(data.checkInDate).toISOString().split("T")[0],
-            checkOutDate: new Date(data.checkOutDate)
-              .toISOString()
-              .split("T")[0],
-            guestPurpose: data.guestPurpose,
-            escorting: data.escorting,
-            guestPriority: data.guestPriority,
-            voucherNumber: data.voucherNumber,
-            plateNumber: data.plateNumber,
-            employeeName: data.employeeId[0]?.employeeName || "",
-          }))
-          .sort((a, b) => b.id.localeCompare(a.id));
-        setRows(transformedData);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this record?")) {
-      deleteUser(`/event/${id}`)
-        .then(() => {
-          fetchData();
-        })
-        .catch((error) => {
-          console.error("Error deleting data:", error);
-        });
+  const fetchData = async () => {
+    try {
+      const response = await get("/event");
+      const dataArray = Array.isArray(response.data.data)
+        ? response.data.data
+        : [];
+      const transformedData = dataArray
+        .map((data) => ({
+          id: data._id,
+          guestName: data.guestId[0]?.guestName || "",
+          waNumber: data.guestId[0]?.waNumber || "",
+          roomNumber: data.roomId[0]?.roomNumber || "",
+          checkInDate: new Date(data.checkInDate).toISOString().split("T")[0],
+          checkOutDate: new Date(data.checkOutDate).toISOString().split("T")[0],
+          guestPurpose: data.guestPurpose,
+          escorting: data.escorting,
+          guestPriority: data.guestPriority,
+          voucherNumber: data.voucherNumber,
+          plateNumber: data.plateNumber,
+          employeeName: data.employeeId[0]?.employeeName || "",
+        }))
+        .sort((a, b) => b.id.localeCompare(a.id));
+      setRows(transformedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      alert("Error fetching data");
     }
-    window.location.reload();
   };
 
-  const handleBulkDelete = () => {
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this record?")) {
+      try {
+        await deleteUser(`/event/${id}`);
+        fetchData();
+      } catch (error) {
+        console.error("Error deleting data:", error);
+        alert("Error deleting data");
+      }
+    }
+  };
+
+  const handleBulkDelete = async () => {
     if (
       window.confirm("Are you sure you want to delete the selected records?")
     ) {
-      const deletePromises = rowSelectionModel.map((id) =>
-        deleteUser(`/event/${id}`)
-      );
-      Promise.all(deletePromises)
-        .then(() => {
-          setRowSelectionModel([]);
-          fetchData();
-        })
-        .catch((error) => {
-          console.error("Error deleting data:", error);
-        });
+      try {
+        const deletePromises = rowSelectionModel.map((id) =>
+          deleteUser(`/event/${id}`)
+        );
+        await Promise.all(deletePromises);
+        setRowSelectionModel([]);
+        fetchData();
+      } catch (error) {
+        console.error("Error deleting data:", error);
+        alert("Error deleting data");
+      }
     }
-    window.location.reload();
   };
 
   const handleUpdate = (row) => {
@@ -88,7 +83,6 @@ const DataTable = () => {
 
   const handleSave = async (updatedData) => {
     try {
-      // Fetch guest ID
       const guestResponse = await post("/guest", {
         guestName: updatedData.guestName,
         waNumber: updatedData.waNumber,
@@ -96,18 +90,14 @@ const DataTable = () => {
 
       const guestId = guestResponse.data.data._id;
 
-      // Fetch room ID
       const roomResponse = await get(
         `/room/bynumber?roomNumber=${updatedData.roomNumber}`
       );
-
       const roomId = roomResponse.data.data._id;
 
-      // Fetch employee ID
       const employeeResponse = await get(
         `/employee/byname?employeeName=${updatedData.employeeName}`
       );
-
       const employeeId = employeeResponse.data.data._id;
 
       if (!guestId || !roomId || !employeeId) {
@@ -115,7 +105,6 @@ const DataTable = () => {
         return;
       }
 
-      // Create the final data object to send to the event API
       const dataToSend = {
         guestId: guestId.toString(),
         roomId: roomId.toString(),
@@ -129,9 +118,6 @@ const DataTable = () => {
         checkOutDate: updatedData.checkOutDate.toString(),
       };
 
-      console.log("Data to Send:", dataToSend); // Log the data to be sent
-
-      // Patch data to the event API
       await axios.patch(
         `http://localhost:3000/event/${updatedData.id}`,
         dataToSend
@@ -143,7 +129,6 @@ const DataTable = () => {
       console.error("Error updating data:", error);
       alert("There was an error updating the reservation.");
     }
-    window.location.reload();
   };
 
   const handleFormSave = async (formData) => {
@@ -179,12 +164,31 @@ const DataTable = () => {
       console.error(`Error submitting ${formData.type.toLowerCase()}:`, error);
       alert(`Error submitting ${formData.type.toLowerCase()}.`);
     }
-    window.location.reload();
   };
+
+  const renderActionsCell = (params) => (
+    <div>
+      <button onClick={() => handleUpdate(params.row)}>
+        <img src={logoUpdate} alt="update" className="scale-150 px-4" />
+      </button>
+      <button onClick={() => handleDelete(params.row.id)}>
+        <img src={logoDelete} alt="delete" className="scale-150 px-4" />
+      </button>
+      <button
+        onClick={() => {
+          setSelectedEventId(params.row.id);
+          setShowForm(true);
+        }}
+        className="bg-secondary-300 hover:bg-secondary-500 text-white px-2 rounded"
+      >
+        Req & Feed
+      </button>
+    </div>
+  );
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "guestName", headerName: "Name", width: 150 },
+    { field: "guestName", headerName: "Name", width: 200 },
     { field: "waNumber", headerName: "WhatsApp", width: 130 },
     { field: "roomNumber", headerName: "Room", width: 130 },
     { field: "checkInDate", headerName: "Check-in Date", width: 150 },
@@ -199,25 +203,7 @@ const DataTable = () => {
       field: "actions",
       headerName: "Actions",
       width: 250,
-      renderCell: (params) => (
-        <div>
-          <button onClick={() => handleUpdate(params.row)}>
-            <img src={logoUpdate} alt="update" className="scale-150 px-4" />
-          </button>
-          <button onClick={() => handleDelete(params.row.id)}>
-            <img src={logoDelete} alt="delete" className="scale-150 px-4" />
-          </button>
-          <button
-            onClick={() => {
-              setSelectedEventId(params.row.id);
-              setShowForm(true);
-            }}
-            className="bg-secondary-300 hover:bg-secondary-500 text-white px-2 rounded"
-          >
-            Req & Feed
-          </button>
-        </div>
-      ),
+      renderCell: renderActionsCell,
     },
   ];
 
@@ -259,12 +245,8 @@ const DataTable = () => {
             setRowSelectionModel(newRowSelectionModel);
           }}
           rowSelectionModel={rowSelectionModel}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[10, 25, 50, 100]}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10]}
         />
       </div>
     </div>

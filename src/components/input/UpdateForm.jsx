@@ -21,14 +21,18 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
   ];
 
   const escortOptions = [
-    { label: "option1", value: "option1" },
-    { label: "option2", value: "option2" },
-    { label: "option3", value: "option3" },
+    { label: "Escorted to Elevator", value: "Escorted to Elevator" },
+    { label: "Escorted to Room", value: "Escorted to Room" },
+    { label: "Refused", value: "Refused" },
+    { label: "Repeater", value: "Repeater" },
+    { label: "No Escort", value: "No Escort" },
   ];
 
   useEffect(() => {
     setFormData(data);
-    setPriorityData(data.guestPriority || { elder: "", child: "", other: "" });
+    setPriorityData(
+      data.guestPriority || { elder: "", child: "", disabled: "", pregnant: "" }
+    );
     fetchRooms();
     fetchEmployees();
   }, [data]);
@@ -43,6 +47,7 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
       setRooms(roomOptions);
     } catch (error) {
       console.error("Error fetching rooms:", error);
+      alert("Error fetching rooms");
     }
   };
 
@@ -56,6 +61,7 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
       setEmployees(employeeOptions);
     } catch (error) {
       console.error("Error fetching employees:", error);
+      alert("Error fetching employees");
     }
   };
 
@@ -81,7 +87,9 @@ const UpdateForm = ({ data, onSave, onCancel }) => {
     e.preventDefault();
     const formattedGuestPriority = `Elder: ${
       priorityData.elder || ""
-    }, Child: ${priorityData.child || ""}, Other: ${priorityData.other || ""}`;
+    }, Child: ${priorityData.child || ""}, Disabled: ${
+      priorityData.disabled || ""
+    }, Pregnant: ${priorityData.pregnant || ""}`;
     onSave({
       ...formData,
       guestPriority: formattedGuestPriority,
