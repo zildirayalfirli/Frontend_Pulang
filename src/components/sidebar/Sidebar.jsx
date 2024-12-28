@@ -20,27 +20,47 @@ export default function Sidebar() {
       </div>
       <div className="sidebar-content py-4 flex-grow">
         <ul>
-          <Link to="/" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
+          <Link
+            to="/"
+            className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
+          >
             <img src={logoUpload} alt="upload" className="scale-150" />
             <div className="p-4">Upload Data</div>
           </Link>
           {user?.role === "admin" ? (
             <>
-              <Link to="/dashboard" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
-                <img src={logoDashboard} alt="dashboard" className="scale-150" />
+              <Link
+                to="/dashboard"
+                className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
+              >
+                <img
+                  src={logoDashboard}
+                  alt="dashboard"
+                  className="scale-150"
+                />
                 <div className="p-4">Dashboard</div>
               </Link>
-              <Link to="/input" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
+              {/* <Link to="/input" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
                 <img src={logoInput} alt="input" className="scale-150" />
                 <div className="p-4">Input</div>
-              </Link>
-              <Link to="/admin" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
-                <img src={logoManageUser} alt="manage user" className="scale-150" />
+              </Link> */}
+              <Link
+                to="/admin"
+                className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
+              >
+                <img
+                  src={logoManageUser}
+                  alt="manage user"
+                  className="scale-150"
+                />
                 <div className="p-4">Manage Users</div>
               </Link>
             </>
           ) : null}
-          <Link to="/logout" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
+          <Link
+            to="/logout"
+            className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
+          >
             <img src={logoLogout} alt="logout" className="scale-150" />
             <div className="p-4">Log Out</div>
           </Link>
