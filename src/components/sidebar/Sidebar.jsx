@@ -1,69 +1,99 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import logologin from "../../assets/Logo-pulang-hitam 1.svg";
 import logoUpload from "../../assets/upload.svg";
 import logoDashboard from "../../assets/trello.svg";
-import logoInput from "../../assets/edit.svg";
+// import logoInput from "../../assets/edit.svg";
 import logoManageUser from "../../assets/user.svg";
 import logoLogout from "../../assets/log-out.svg";
 
 export default function Sidebar() {
   const user = useSelector((state) => state.Auth.user);
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="sidebar bg-secondary-300 text-white w-64 h-full fixed z-10 flex flex-col">
-      <div className="sidebar-header p-4 font-bold">
-        <div className="py-6 flex justify-center border-b-2">
-          <img src={logologin} alt="logo login" className="w-2/3 h-auto" />
-        </div>
+    <div className="sidebar bg-secondary-300 text-white w-64 h-full fixed z-10 flex flex-col shadow-lg">
+      <div className="sidebar-header py-6 flex justify-center border-b border-secondary-500">
+        <img src={logologin} alt="Pulang Logo" className="w-2/3 h-auto" />
       </div>
+
       <div className="sidebar-content py-4 flex-grow">
-        <ul>
-          <Link
-            to="/"
-            className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
-          >
-            <img src={logoUpload} alt="upload" className="scale-150" />
-            <div className="p-4">Upload Data</div>
-          </Link>
-          {user?.role === "admin" ? (
+        <ul className="space-y-2">
+          <li>
+            <Link
+              to="/"
+              className={`flex items-center px-4 py-3 rounded-lg transition ${
+                isActive("/") ? "bg-secondary-500" : "hover:bg-secondary-500"
+              }`}
+            >
+              <img src={logoUpload} alt="Upload" className="w-6 h-6" />
+              <span className="ml-3 text-sm font-medium">Upload Data</span>
+            </Link>
+          </li>
+
+          {user?.role === "admin" && (
             <>
-              <Link
-                to="/dashboard"
-                className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
-              >
-                <img
-                  src={logoDashboard}
-                  alt="dashboard"
-                  className="scale-150"
-                />
-                <div className="p-4">Dashboard</div>
-              </Link>
-              {/* <Link to="/input" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
+              <li>
+                <Link
+                  to="/dashboard"
+                  className={`flex items-center px-4 py-3 rounded-lg transition ${
+                    isActive("/dashboard")
+                      ? "bg-secondary-500"
+                      : "hover:bg-secondary-500"
+                  }`}
+                >
+                  <img
+                    src={logoDashboard}
+                    alt="Dashboard"
+                    className="w-6 h-6"
+                  />
+                  <span className="ml-3 text-sm font-medium">Dashboard</span>
+                </Link>
+              </li>
+
+              {/* <li>
+              <Link to="/input" className="mb-2 px-4 flex hover:bg-secondary-500 items-center">
                 <img src={logoInput} alt="input" className="scale-150" />
                 <div className="p-4">Input</div>
-              </Link> */}
-              <Link
-                to="/admin"
-                className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
-              >
-                <img
-                  src={logoManageUser}
-                  alt="manage user"
-                  className="scale-150"
-                />
-                <div className="p-4">Manage Users</div>
               </Link>
+              </li> */}
+
+              <li>
+                <Link
+                  to="/admin"
+                  className={`flex items-center px-4 py-3 rounded-lg transition ${
+                    isActive("/admin")
+                      ? "bg-secondary-500"
+                      : "hover:bg-secondary-500"
+                  }`}
+                >
+                  <img
+                    src={logoManageUser}
+                    alt="Manage Users"
+                    className="w-6 h-6"
+                  />
+                  <span className="ml-3 text-sm font-medium">Manage Users</span>
+                </Link>
+              </li>
             </>
-          ) : null}
-          <Link
-            to="/logout"
-            className="mb-2 px-4 flex hover:bg-secondary-500 items-center"
-          >
-            <img src={logoLogout} alt="logout" className="scale-150" />
-            <div className="p-4">Log Out</div>
-          </Link>
+          )}
+
+          <li>
+            <Link
+              to="/logout"
+              className={`flex items-center px-4 py-3 rounded-lg transition ${
+                isActive("/logout")
+                  ? "bg-secondary-500"
+                  : "hover:bg-secondary-500"
+              }`}
+            >
+              <img src={logoLogout} alt="Log Out" className="w-6 h-6" />
+              <span className="ml-3 text-sm font-medium">Log Out</span>
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
