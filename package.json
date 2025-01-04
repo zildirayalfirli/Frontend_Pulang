@@ -34,6 +34,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^7.1.0",
     "react-dom": "^18.2.0",
+    "react-dropdown": "^1.11.0",
     "react-dropdown-select": "^4.11.2",
     "react-faux-dom": "^4.5.0",
     "react-hot-toast": "^2.4.1",
