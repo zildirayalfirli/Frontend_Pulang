@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "./redux/AuthSlice";
 import LogOut from "./pages/LogOut";
 import Dashboard from "./pages/Dashboard";
+import Query from "./pages/Query";
 // import Input from "./pages/Input";
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<UserLayout />}>
             <Route index element={<Home />} />
+            <Route path="query" element={<Query />} />
             {/* <Route path="input" element={<Input />} /> */}
             <Route path="logout" element={<LogOut />} />
           </Route>

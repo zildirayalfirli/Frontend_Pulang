@@ -7,6 +7,7 @@ import logoDashboard from "../../assets/trello.svg";
 // import logoInput from "../../assets/edit.svg";
 import logoManageUser from "../../assets/user.svg";
 import logoLogout from "../../assets/log-out.svg";
+import logoOpenAI from "../../assets/openai.svg";
 
 export default function Sidebar() {
   const user = useSelector((state) => state.Auth.user);
@@ -25,9 +26,7 @@ export default function Sidebar() {
           <li>
             <Link
               to="/"
-              className={`flex items-center px-4 py-3 rounded-lg transition ${
-                isActive("/") ? "bg-secondary-500" : "hover:bg-secondary-500"
-              }`}
+              className={`flex items-center px-4 py-3 rounded-lg transition ${isActive("/") ? "bg-secondary-500" : "hover:bg-secondary-500"}`}
             >
               <img src={logoUpload} alt="Upload" className="w-6 h-6" />
               <span className="ml-3 text-sm font-medium">Upload Data</span>
@@ -40,16 +39,10 @@ export default function Sidebar() {
                 <Link
                   to="/dashboard"
                   className={`flex items-center px-4 py-3 rounded-lg transition ${
-                    isActive("/dashboard")
-                      ? "bg-secondary-500"
-                      : "hover:bg-secondary-500"
+                    isActive("/dashboard") ? "bg-secondary-500" : "hover:bg-secondary-500"
                   }`}
                 >
-                  <img
-                    src={logoDashboard}
-                    alt="Dashboard"
-                    className="w-6 h-6"
-                  />
+                  <img src={logoDashboard} alt="Dashboard" className="w-6 h-6" />
                   <span className="ml-3 text-sm font-medium">Dashboard</span>
                 </Link>
               </li>
@@ -65,17 +58,22 @@ export default function Sidebar() {
                 <Link
                   to="/admin"
                   className={`flex items-center px-4 py-3 rounded-lg transition ${
-                    isActive("/admin")
-                      ? "bg-secondary-500"
-                      : "hover:bg-secondary-500"
+                    isActive("/admin") ? "bg-secondary-500" : "hover:bg-secondary-500"
                   }`}
                 >
-                  <img
-                    src={logoManageUser}
-                    alt="Manage Users"
-                    className="w-6 h-6"
-                  />
+                  <img src={logoManageUser} alt="Manage Users" className="w-6 h-6" />
                   <span className="ml-3 text-sm font-medium">Manage Users</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/query"
+                  className={`flex items-center px-4 py-3 rounded-lg transition ${
+                    isActive("/query") ? "bg-secondary-500" : "hover:bg-secondary-500"
+                  }`}
+                >
+                  <img src={logoOpenAI} alt="OpenAI" className="w-6 h-6" />
+                  <span className="ml-3 text-sm font-medium">Query Assistant</span>
                 </Link>
               </li>
             </>
@@ -84,11 +82,7 @@ export default function Sidebar() {
           <li>
             <Link
               to="/logout"
-              className={`flex items-center px-4 py-3 rounded-lg transition ${
-                isActive("/logout")
-                  ? "bg-secondary-500"
-                  : "hover:bg-secondary-500"
-              }`}
+              className={`flex items-center px-4 py-3 rounded-lg transition ${isActive("/logout") ? "bg-secondary-500" : "hover:bg-secondary-500"}`}
             >
               <img src={logoLogout} alt="Log Out" className="w-6 h-6" />
               <span className="ml-3 text-sm font-medium">Log Out</span>

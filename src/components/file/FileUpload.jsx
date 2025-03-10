@@ -102,8 +102,8 @@ function FileUpload() {
   const submitFile = async (e) => {
     e.preventDefault();
     if (!selectedOption || !file) {
-        alert("Please select a file type and a file before uploading.");
-        return;
+      alert("Please select a file type and a file before uploading.");
+      return;
     }
 
     const formData = new FormData();
@@ -111,32 +111,31 @@ function FileUpload() {
 
     const endpoint = uploadEndpointMap[selectedOption.value];
     if (!endpoint) {
-        alert("Invalid file type selected.");
-        return;
+      alert("Invalid file type selected.");
+      return;
     }
 
     try {
-        setUploading(true);
-        const result = await uploadFile(endpoint, formData);
-        if (result.data.success) {
-            alert("Uploaded Successfully!!!");
-            fetchFilesByType(selectedOption.value);
-            setFile(null);
-            setFileName("");
-        }
+      setUploading(true);
+      const result = await uploadFile(endpoint, formData);
+      if (result.data.success) {
+        alert("Uploaded Successfully!!!");
+        fetchFilesByType(selectedOption.value);
+        setFile(null);
+        setFileName("");
+      }
     } catch (error) {
-        console.error("There was an error uploading the file!", error);
+      console.error("There was an error uploading the file!", error);
 
-        if (error.response && error.response.data.msg === "Please Input the correct file type") {
-            alert("Please Input the correct file type");
-        } else {
-            alert("Please Input the correct file type");
-        }
+      if (error.response && error.response.data.msg === "Please Input the correct file type") {
+        alert("Please Input the correct file type");
+      } else {
+        alert("Please Input the correct file type");
+      }
     } finally {
-        setUploading(false);
+      setUploading(false);
     }
   };
-
 
   const handleDelete = async (id, optionValue) => {
     const endpoint = deleteEndpointMap[optionValue];
@@ -191,31 +190,23 @@ function FileUpload() {
             searchable
             color="orange"
           />
-          <form
-            className="flex flex-col items-center py-4"
-            onSubmit={submitFile}
-          >
-          <label className="w-full flex flex-col border-dashed border-2 border-[#EE7F2B] items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border cursor-pointer hover:bg-secondary-300 hover:text-white">
-            <FaArrowUp className="h-8 w-8" />
-            <span className="mt-2 text-base leading-normal">Upload File</span>
-            <input
-              type="file"
-              className="hidden"
-              accept=".csv"
-              onChange={(e) => {
-                setFile(e.target.files[0]);
-                setFileName(e.target.files[0]?.name || "");
-                e.target.value = null; // Reset input value to allow re-selection
-              }}
-            />
+          <form className="flex flex-col items-center py-4" onSubmit={submitFile}>
+            <label className="w-full flex flex-col border-dashed border-2 border-[#EE7F2B] items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border cursor-pointer hover:bg-secondary-300 hover:text-white">
+              <FaArrowUp className="h-8 w-8" />
+              <span className="mt-2 text-base leading-normal">Upload File</span>
+              <input
+                type="file"
+                className="hidden"
+                accept=".csv"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                  setFileName(e.target.files[0]?.name || "");
+                  e.target.value = null; // Reset input value to allow re-selection
+                }}
+              />
+            </label>
 
-          </label>
-
-            {fileName && (
-              <div className="mt-2 text-gray-600">
-                Selected file: {fileName}
-              </div>
-            )}
+            {fileName && <div className="mt-2 text-gray-600">Selected file: {fileName}</div>}
             <button
               className="mt-6 bg-secondary-300 hover:bg-secondary-500 text-white py-2 px-4 h-10 w-20 rounded-lg flex justify-center items-center"
               type="submit"
@@ -229,11 +220,8 @@ function FileUpload() {
           <Skeleton className="mb-4 mt-10 border border-black h-56 w-96" />
         ) : (
           Object.entries(allFiles).map(([key, files]) => (
-            <div
-              key={key}
-              className="w-full border-2 border-black max-w-4xl mt-10 py-4 px-8 bg-primary-100 rounded-lg shadow-lg"
-            >
-              <h4 className="text-xl font-bold mt-2 mb-6">{options.find(o => o.value === Number(key))?.label || "Unknown"}:</h4>
+            <div key={key} className="w-full border-2 border-black max-w-4xl mt-10 py-4 px-8 bg-primary-100 rounded-lg shadow-lg">
+              <h4 className="text-xl font-bold mt-2 mb-6">{options.find((o) => o.value === Number(key))?.label || "Unknown"}:</h4>
               <div className="grid grid-cols-3 text-lg font-semibold border-b-2 pb-2">
                 <div className="flex justify-center">File Name</div>
                 <div className="flex justify-center">Created At</div>
@@ -241,10 +229,7 @@ function FileUpload() {
               </div>
               {files.length > 0 ? (
                 files.map((file, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-3 items-center text-sm py-2 border-b"
-                  >
+                  <div key={index} className="grid grid-cols-3 items-center text-sm py-2 border-b">
                     <div className="flex justify-center">{file.fileName || "No file name available"}</div>
                     <div className="flex justify-center">{new Date(file.createdAt).toLocaleString()}</div>
                     <div className="flex justify-center">
@@ -253,11 +238,7 @@ function FileUpload() {
                         onClick={() => handleDelete(file._id, key)}
                         disabled={deleting === file._id}
                       >
-                        {deleting === file._id ? (
-                          <ClipLoader size={20} color="#fff" />
-                        ) : (
-                          "Delete"
-                        )}
+                        {deleting === file._id ? <ClipLoader size={20} color="#fff" /> : "Delete"}
                       </button>
                     </div>
                   </div>
